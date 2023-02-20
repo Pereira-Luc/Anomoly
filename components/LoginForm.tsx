@@ -7,8 +7,6 @@ import {fadeInAnimation} from "../animations/fadeAnimation";
 import {useNavigation} from "@react-navigation/native";
 
 
-
-
 const LoginForm = ({setLogin}) => {
     let navigation = useNavigation();
     const submitLogin = () => {

@@ -57,7 +57,6 @@ export default StyleSheet.create({
     },
     mainContainer: {
         flex: 1,
-        backgroundColor: '#080e2c',
     },
     spacer: {
         top: '0%',
@@ -98,12 +97,103 @@ export default StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
         borderRadius: 10,
         padding: '3%',
+        color: '#ffffff',
+        height: (Platform.OS === 'ios') ? 40 : 35,
+        fontSize: (Platform.OS === 'ios') ? 20 : 16,
     },
     footer: {
-        height: '10%',
+        height: '8%',
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        bottom: 0,
     },
     msgScroll: {
         overflow: 'visible',
+    },
+    footerButton: {
+        width: 50,
+        height: 50,
+        marginTop: 10,
+    },
+    groupsButtonFooter: {},
+    chatsButtonFooter: {},
+    settingButtonFooter: {},
+    footerImg: {
+        width: (Platform.OS === 'ios') ? 35 : 30,
+        height: (Platform.OS === 'ios') ? 35 : 30,
+        //Invert colors
+        tintColor: '#ffffff',
+    },
+    footerImgActive: {
+        width: (Platform.OS === 'ios') ? 35 : 30,
+        height: (Platform.OS === 'ios') ? 35 : 30,
+        //Invert colors
+        tintColor: '#00ff9d',
+    },
+    centerTextHorizontal: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    profileImageEdit: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: (Platform.OS === 'ios') ? 180 : 150,
+        height: (Platform.OS === 'ios') ? 180 : 150,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 100,
+        overflow: 'hidden',
+    },
+    textH2Style: {
+        fontSize: (Platform.OS === 'ios') ? 20 : 16,
+        fontWeight: 'bold',
+        color: '#ffffff',
+    },
+    changeContainer: {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderBottomLeftRadius: (Platform.OS === 'ios') ? 170 : 90,
+        borderBottomRightRadius: (Platform.OS === 'ios') ? 180 : 90,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '50%',
+        top: '75%',
+        width: '100%',
+    },
+    changeText: {
+        color: 'black',
+        fontSize: (Platform.OS === 'ios') ? 16 : 13,
+        fontWeight: 'bold',
+        top: -20,
+        textAlign: 'center',
+    },
+    settingBox: {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: (Platform.OS === 'ios') ? 10 : 10,
+        padding: '3%',
+        color: '#ffffff',
+        marginTop: '5%',
+        width: '90%',
+    },
+    settingsContainer: {
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+    },
+    textH3Style: {
+        fontSize: (Platform.OS === 'ios') ? 15 : 12,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginTop: 5,
+    },
+    marginTop5: {
+        marginTop: 5,
     }
 })
+
+
