@@ -6,13 +6,15 @@ const stylesMsgBox = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: '5%',
-        marginRight: '5%',
+        justifyContent: 'space-between',
         marginTop: '1%',
         marginBottom: '1%',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: '#008153',
         borderRadius: 10,
         padding: '3%',
+        zIndex: 1,
+        marginLeft: '2%',
+        marginRight: '2%',
     },
     lastMsg: {
         color: '#ffffff',
@@ -33,6 +35,20 @@ const stylesMsgBox = StyleSheet.create({
     },
     lastMsgBox: {
         flexDirection: 'row',
+    },
+    deleteButton: {
+        width: '100%',
+        height: '100%',
+    },
+    deleteButtonText: {
+        color: '#ffffff',
+        fontSize: (Platform.OS === 'ios') ? 20 : 16,
+    },
+    deleteButtonContainer: {
+        margin: 0,
+        alignContent: 'center',
+        justifyContent: 'center',
+        width: 70,
     }
 })
 
