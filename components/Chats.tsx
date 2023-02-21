@@ -24,7 +24,7 @@ const Chats = () => {
                 <TextInput placeholder="Search"></TextInput>
             </View>
             <ScrollView>
-                <MsgBox lastMsg="Test Length of message before breaking everything. Test Length of message before breaking everything. Test Length of message before breaking everything" nameOfUser="John" date="12:00" />
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00" />
                 <MsgBox lastMsg="Test Length of message before breaking everything. Test Length of message before breaking everything. Test Length of message before breaking everything" nameOfUser="John" date="12:00" />
                 <MsgBox lastMsg="Test Length of message before breaking everything. Test Length of message before breaking everything. Test Length of message before breaking everything" nameOfUser="John" date="12:00" />
             </ScrollView>
