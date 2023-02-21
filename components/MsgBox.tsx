@@ -1,11 +1,10 @@
 import {TouchableHighlight, View, Text, Animated, PanResponder, TouchableOpacity, Dimensions} from "react-native";
 import stylesMsgBox from "../styles/stylesMsgBox";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {useState} from "react";
-import {Simulate} from "react-dom/test-utils";
-import progress = Simulate.progress;
+import {useNavigation} from "@react-navigation/native";
 
 export function MsgBox({lastMsg, nameOfUser, date}) {
+    let navigation = useNavigation();
     const onDelete = () => {
         console.log("Delete");
     }
@@ -17,18 +16,25 @@ export function MsgBox({lastMsg, nameOfUser, date}) {
         </TouchableOpacity>)
     };
 
+    const openChat = () => {
+        console.log("Open chat");
+        //Navigate to MsgRoom
+        // @ts-ignore
+        navigation.navigate("MsgRoom");
+    }
+
     return (
         <Swipeable
-            renderRightActions={(progress, dragX) =>
+            renderRightActions={() =>
                 renderRightView()
             }>
-            <TouchableOpacity style={stylesMsgBox.MsgBox} >
+            <TouchableOpacity style={stylesMsgBox.MsgBox} onPress={openChat}>
                 <View style={stylesMsgBox.pfPic}></View>
                 <View>
                     <Text style={stylesMsgBox.nameOfUser}>{nameOfUser}</Text>
                     <View style={stylesMsgBox.lastMsgBox}>
-                        <Text style={stylesMsgBox.lastMsg}>{lastMsg}</Text>
-                        <Text style={stylesMsgBox.lastMsg}> - {date}</Text>
+                        <Text numberOfLines={1} style={[stylesMsgBox.lastMsg, stylesMsgBox.lastMsgText]}>{lastMsg}</Text>
+                        <Text style={[stylesMsgBox.lastMsg, stylesMsgBox.lastMsgDate]}>  {date}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
