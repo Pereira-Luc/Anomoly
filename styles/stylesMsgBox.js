@@ -6,21 +6,20 @@ const stylesMsgBox = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: '1%',
-        marginBottom: '1%',
-        backgroundColor: '#008153',
-        borderRadius: 10,
-        padding: '3%',
-        zIndex: 1,
+        borderColor: 'rgba(0,255,157,0.51)',
+        borderBottomWidth: 0.5,
         marginLeft: '2%',
         marginRight: '2%',
+        padding: '1%',
     },
     lastMsg: {
-        color: '#ffffff',
+        color: '#9a9a9a',
         fontSize: (Platform.OS === 'ios') ? 15 : 12,
         maxWidth: Dimensions.get('window').width * 0.58,
         maxHeight: Dimensions.get('window').width * 0.08,
+        // Make sure the text doesn't go to the next line but simply cut off
+        overflow: 'hidden',
+
     },
     pfPic: {
         backgroundColor: '#ffffff',
@@ -35,6 +34,9 @@ const stylesMsgBox = StyleSheet.create({
     },
     lastMsgBox: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: Dimensions.get('window').width * 0.7,
     },
     deleteButton: {
         width: '100%',
@@ -49,6 +51,15 @@ const stylesMsgBox = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         width: 70,
+    },
+    lastMsgDate: {
+        color: '#9a9a9a',
+        fontSize: (Platform.OS === 'ios') ? 15 : 12,
+    },
+    lastMsgText: {
+        //Prevent the text from going to the next line
+        flexShrink: 1,
+
     }
 })
 

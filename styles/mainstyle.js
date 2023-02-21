@@ -204,8 +204,7 @@ export default StyleSheet.create({
         height: '100%',
         //Invert colors
         color: '#00ff9d',
-    },
-
+    }
 
 })
 
