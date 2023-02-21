@@ -164,7 +164,7 @@ export default StyleSheet.create({
         width: '100%',
     },
     changeText: {
-        color: 'black',
+        color: 'rgba(0,255,157,0.62)',
         fontSize: (Platform.OS === 'ios') ? 16 : 13,
         fontWeight: 'bold',
         top: -20,
@@ -187,7 +187,7 @@ export default StyleSheet.create({
     textH3Style: {
         fontSize: (Platform.OS === 'ios') ? 15 : 12,
         fontWeight: 'bold',
-        color: '#ffffff',
+        color: 'rgba(108,255,202,0.75)',
         marginTop: 5,
     },
     marginTop5: {

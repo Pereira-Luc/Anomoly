@@ -11,6 +11,7 @@ const stylesMsgBox = StyleSheet.create({
         marginLeft: '2%',
         marginRight: '2%',
         padding: '1%',
+        backgroundColor: '#000000',
     },
     lastMsg: {
         color: '#9a9a9a',
