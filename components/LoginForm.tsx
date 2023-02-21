@@ -15,7 +15,6 @@ const LoginForm = ({setLogin}) => {
         console.log(password)
 
         // Navigate to the MainPage Screen
-
         // @ts-ignore
         navigation.navigate('MainPage');
     }
