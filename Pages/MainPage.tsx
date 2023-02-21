@@ -23,7 +23,7 @@ const MainPage = () => {
     const [page, setPage] = React.useState("Chats");
 
     return (
-        <LinearGradient style={styles.mainContainer} colors={['#070d28', '#16002a','#200026','#1c0009']}>
+        <View style={styles.mainContainer}>
             {page === "Chats" ? <Chats /> : null}
             {page === "Groups" ? <Groups /> : null}
             {page === "Settings" ? <Settings /> : null}
@@ -38,7 +38,7 @@ const MainPage = () => {
                     <Image source={require('../assets/icons/setting3.png')} style={[styles.footerImg, page === "Settings" && styles.footerImgActive]}></Image>
                 </TouchableOpacity>
             </View>
-        </LinearGradient >
+        </View >
     )
 }
 

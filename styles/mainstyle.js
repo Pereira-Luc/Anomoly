@@ -57,6 +57,7 @@ export default StyleSheet.create({
     },
     mainContainer: {
         flex: 1,
+        backgroundColor: '#000000',
     },
     spacer: {
         top: '0%',
@@ -66,8 +67,7 @@ export default StyleSheet.create({
         marginLeft: '5%',
         display: 'flex',
         top: '0%',
-        backgroundColor: '#ffffff',
-        width: '7%',
+        width: '8%',
         height: Dimensions.get('window').width * 0.07,
         borderRadius: 100,
     },
@@ -75,7 +75,6 @@ export default StyleSheet.create({
         marginRight: '5%',
         display: 'flex',
         top: '0%',
-        backgroundColor: '#ffffff',
         width: '7%',
         height: Dimensions.get('window').width * 0.07,
         borderRadius: 100,
@@ -193,7 +192,21 @@ export default StyleSheet.create({
     },
     marginTop5: {
         marginTop: 5,
-    }
+    },
+    bubbleButtonLeftImg: {
+        width: '90%',
+        height: '95%',
+        //Invert colors
+        tintColor: '#00ff9d',
+    },bubbleButtonRightImg: {
+        fontSize: (Platform.OS === 'ios') ? 20 : 15,
+        width: '100%',
+        height: '100%',
+        //Invert colors
+        color: '#00ff9d',
+    },
+
+
 })
 
 
