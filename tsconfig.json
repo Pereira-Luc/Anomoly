@@ -1,4 +1,6 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "types": ["react", "react-native", "react-native-image-picker"]
+  },
   "extends": "expo/tsconfig.base"
 }
