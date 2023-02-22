@@ -5,9 +5,6 @@ import SettingsBox from "./SettingsBox";
 import {ActionSheetProvider, useActionSheet} from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 
-
-
-
 const Settings = () => {
     const checkPermissions = async (cameraGranted = null, status = null) => {
         if (!cameraGranted) {
