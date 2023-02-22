@@ -84,6 +84,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+
     },
     textH1Style: {
         fontSize: 20,
@@ -93,7 +94,7 @@ export default StyleSheet.create({
     searchBox: {
         margin: '5%',
         marginTop: '2%',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: 'rgba(255,255,255,0.15)',
         borderRadius: 10,
         padding: '3%',
         color: '#ffffff',
@@ -102,7 +103,7 @@ export default StyleSheet.create({
     },
     footer: {
         height: '8%',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: '#151515',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -204,6 +205,13 @@ export default StyleSheet.create({
         height: '100%',
         //Invert colors
         color: '#00ff9d',
+    },
+    head:{
+        backgroundColor: 'rgba(0,255,157,0)',
+    },
+    searchInput: {
+        color: '#e3e3e3',
+        fontSize: (Platform.OS === 'ios') ? 17 : 12,
     }
 
 })

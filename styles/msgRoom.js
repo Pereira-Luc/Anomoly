@@ -29,7 +29,7 @@ const stylesMsgRoom = StyleSheet.create({
         marginLeft: '5%',
         display: 'flex',
         top: '0%',
-        backgroundColor: '#000',
+        backgroundColor: '#e52929',
         width: Dimensions.get('window').width * 0.10,
         height: Dimensions.get('window').width * 0.10,
         borderRadius: 100,
@@ -49,7 +49,7 @@ const stylesMsgRoom = StyleSheet.create({
         height: Dimensions.get('window').height * 0.11,
         backgroundColor: '#151515',
     }, footer: {
-        backgroundColor: 'rgba(21,21,21,0.65)',
+        backgroundColor: '#151515',
         width: '100%',
         height: Dimensions.get('window').height * 0.1,
     }, msgInput: {
@@ -80,7 +80,6 @@ const stylesMsgRoom = StyleSheet.create({
     }, msgInputContainer: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: 'rgba(21,21,21,0.65)',
     }, msgInputContainerCenter: {
         display: 'flex',
         flexDirection: 'row',
