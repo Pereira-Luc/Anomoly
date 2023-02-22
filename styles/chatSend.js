@@ -8,9 +8,11 @@ const stylesChatSend = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     textBubble: {
-        maxWidth: Dimensions.get('window').width * 0.42,
-        backgroundColor: '#AAB',
+        maxWidth: Dimensions.get('window').width * 0.80,
+        backgroundColor: 'rgb(0,255,157)',
+        //right bottom border radius is 0 to make it look like a speech bubble
         borderRadius: 10,
+        borderBottomRightRadius: 2,
     }, textBubblePadding: {
         padding: Dimensions.get('window').width * 0.02,
     },
@@ -18,6 +20,7 @@ const stylesChatSend = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        right: Dimensions.get('window').width * 0.1,
     },textContent: {}
 })
 
