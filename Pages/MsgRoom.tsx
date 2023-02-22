@@ -24,8 +24,8 @@ export function MsgRoom() {
     }
 
     return (
-        <View style={stylesMsgRoom.containerMain}>
 
+        <View style={stylesMsgRoom.containerMain}>
             <View style={stylesMsgRoom.head}></View>
             <View style={stylesMsgRoom.container}>
                 <View style={stylesMsgRoom.spacer}></View>
@@ -41,25 +41,26 @@ export function MsgRoom() {
                         <ChatReceive/>
                         <ChatReceive/>
                         <ChatReceive/>
-                        <ChatReceive/>
                         <ChatSend/>
+                        <ChatReceive/>
                         <ChatSend/>
 
                     </ScrollView >
                 </ImageBackground>
             </View>
-
-            <View style={stylesMsgRoom.footer}>
-                <View style={stylesMsgRoom.container}>
-                    <View style={stylesMsgRoom.msgInputContainer}>
-                        <TextInput style={stylesMsgRoom.msgInput}></TextInput>
-                        <View style={stylesMsgRoom.msgInputContainerCenter}>
-                            <TouchableOpacity style={stylesMsgRoom.sendButton}><Image style={stylesMsgRoom.sendButtonImg} source={require("../assets/icons/send.png")}></Image></TouchableOpacity>
+            <KeyboardAvoidingView behavior="position">
+                <View style={stylesMsgRoom.footer}>
+                    <View style={stylesMsgRoom.container}>
+                        <View style={stylesMsgRoom.msgInputContainer}>
+                            <TextInput style={stylesMsgRoom.msgInput}></TextInput>
+                            <View style={stylesMsgRoom.msgInputContainerCenter}>
+                                <TouchableOpacity style={stylesMsgRoom.sendButton}>
+                                    <Image style={stylesMsgRoom.sendButtonImg} source={require("../assets/icons/send.png")}/>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
-            <KeyboardAvoidingView behavior="padding">
             </KeyboardAvoidingView>
         </View>
     )
