@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -22,7 +22,8 @@
       "infoPlist": {
         "NSPhotoLibraryAddUsageDescription": "This app needs permission to save photos to your library",
         "NSPhotoLibraryUsageDescription": "This app needs permission to access your photo library"
-      }
+      },
+      "userInterfaceStyle": "dark"
     },
     "android": {
       "permissions": [
@@ -33,7 +34,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "userInterfaceStyle": "dark"
     },
     "web": {
       "favicon": "./assets/favicon.png"
