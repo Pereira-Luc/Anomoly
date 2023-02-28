@@ -217,6 +217,11 @@ export default StyleSheet.create({
         width: (Platform.OS === 'ios') ? 180 : 150,
         height: (Platform.OS === 'ios') ? 180 : 150,
         position: 'absolute',
+    },
+    blurryBack: {
+        backgroundColor: 'rgba(0,0,0,0.6)', // semi-transparent background
+        ...StyleSheet.absoluteFillObject, // fills entire screen
+        zIndex: 1, // ensures this style appears on top of other styles
     }
 
 })

@@ -18,7 +18,6 @@ const Settings = () => {
         (async () => {
             //This function will also check if the user has a profile picture stored online once we have a database
             let profilePic = await SecureStore.getItemAsync('profilePic') ?? require('../assets/icons/profile.png');
-            console.log(profilePic);
             setSelectedImage({uri: profilePic});
         })();
     }, []);
