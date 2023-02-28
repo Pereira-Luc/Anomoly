@@ -1,4 +1,4 @@
-import {Animated, Dimensions, Platform, StyleSheet} from "react-native";
+import {Dimensions, Platform, StyleSheet} from "react-native";
 
 export default StyleSheet.create({
     input: {
@@ -142,7 +142,7 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    profileImage: {
+    profileImageContainer: {
         width: (Platform.OS === 'ios') ? 180 : 150,
         height: (Platform.OS === 'ios') ? 180 : 150,
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -155,7 +155,7 @@ export default StyleSheet.create({
         color: '#ffffff',
     },
     changeContainer: {
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: 'rgba(59,59,59,0.47)',
         borderBottomLeftRadius: (Platform.OS === 'ios') ? 170 : 90,
         borderBottomRightRadius: (Platform.OS === 'ios') ? 180 : 90,
         justifyContent: 'center',
@@ -206,12 +206,17 @@ export default StyleSheet.create({
         //Invert colors
         color: '#00ff9d',
     },
-    head:{
+    head: {
         backgroundColor: 'rgba(0,255,157,0)',
     },
     searchInput: {
         color: '#e3e3e3',
         fontSize: (Platform.OS === 'ios') ? 17 : 12,
+    },
+    profileImage: {
+        width: (Platform.OS === 'ios') ? 180 : 150,
+        height: (Platform.OS === 'ios') ? 180 : 150,
+        position: 'absolute',
     }
 
 })
