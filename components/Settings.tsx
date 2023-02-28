@@ -1,82 +1,64 @@
-import {Image, Platform, Text, TouchableOpacity, View} from "react-native";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 import styles from "../styles/mainstyle";
 import SettingsBox from "./SettingsBox";
+import {useActionSheet} from '@expo/react-native-action-sheet';
 
-import {ActionSheetProvider, useActionSheet} from '@expo/react-native-action-sheet';
-import * as ImagePicker from 'expo-image-picker';
+import {showPicMenu} from "../Functions/cameraMenu";
+import {useEffect, useState} from "react";
+import * as FileSystem from 'expo-file-system';
+import * as SecureStore from 'expo-secure-store';
 
 const Settings = () => {
-    const checkPermissions = async (cameraGranted = null, status = null) => {
-        if (!cameraGranted) {
-            alert('You need to enable camera permissions to work');
-            return;
+
+    const {showActionSheetWithOptions} = useActionSheet();
+    const [selectedImage, setSelectedImage] = useState(require('../assets/icons/profile.png'));
+
+
+    useEffect(() => {
+        (async () => {
+            //This function will also check if the user has a profile picture stored online once we have a database
+            let profilePic = await SecureStore.getItemAsync('profilePic') ?? require('../assets/icons/profile.png');
+            console.log(profilePic);
+            setSelectedImage({uri: profilePic});
+        })();
+    }, []);
+
+
+    const changeProfilePic = async () => {
+        try {
+            let result = await showPicMenu(showActionSheetWithOptions)
+
+            console.log(result);
+
+            if (result === null) return;
+
+            // Use the image to store it locally and use it as the profile picture
+            // @ts-ignore
+            const selectedAsset = result.assets[0];
+            const selectedImageUri = selectedAsset.uri;
+            const filename = selectedImageUri.split('/').pop();
+            const docDirectoryUri = FileSystem.documentDirectory + filename;
+
+            console.log(filename);
+            console.log(selectedImageUri);
+            console.log(docDirectoryUri);
+
+
+            // Store the image locally and use it as the profile picture
+            // Copy the selected image to the document directory
+            await FileSystem.copyAsync({
+                from: selectedImageUri,
+                to: docDirectoryUri,
+            });
+
+            setSelectedImage({uri: docDirectoryUri});
+            //Save uri to local storage
+            await SecureStore.setItemAsync('profilePic', docDirectoryUri);
+
+        } catch (e) {
+            console.log(e);
         }
-        if (status !== 'granted' && status !== null) {
-            alert('You need to enable gallery permissions to work');
-            return;
-        }
-        return true;
     }
-
-    const { showActionSheetWithOptions } = useActionSheet();
-    const showPicMenu = async () => {
-
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        const { granted: cameraGranted } = await ImagePicker.getCameraPermissionsAsync();
-
-        const options = ['Take Photo', 'Choose From Gallery', 'Cancel'];
-        const cancelButtonIndex = 2;
-        const takePhotoIndex = 0;
-        const chooseFromGalleryIndex = 1;
-
-        showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-                userInterfaceStyle: 'dark',
-            },
-            (selectedIndex: number) => {
-                switch (selectedIndex) {
-                    case takePhotoIndex:
-                        // Take Photo
-                        //Check permissions
-                        if (!checkPermissions(cameraGranted)) return;
-
-                        //Open camera
-                        ImagePicker.launchCameraAsync({
-                            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                            allowsEditing: true,
-                            aspect: [4, 3],
-                            quality: 0.5,
-                        }).then((result) => {
-                            if (result.canceled) return;
-                            console.log(result);
-                        });
-                        break;
-                    case chooseFromGalleryIndex:
-                        // Choose From Gallery
-                        //Check permissions
-                        if (!checkPermissions(status)) return;
-
-                        //Open gallery
-                        ImagePicker.launchImageLibraryAsync({
-                            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                            allowsEditing: true,
-                            aspect: [4, 3],
-                            quality: 0.5,
-                        }).then((result) => {
-                            if (result.canceled) return;
-                            console.log(result);
-                        });
-                        break;
-                    case cancelButtonIndex:
-                        // Cancel
-                        console.log('Cancel');
-                        break;
-                }
-            }
-        )
-    };
 
     return (
         <View style={styles.mainContainer}>
@@ -85,7 +67,8 @@ const Settings = () => {
                 <Text style={[styles.textH1Style]}>Settings</Text>
             </View>
             <View style={styles.profileImageEdit}>
-                <TouchableOpacity style={styles.profileImage} onPress={() => showPicMenu()}>
+                <TouchableOpacity style={styles.profileImageContainer} onPress={() => changeProfilePic()}>
+                    <Image source={selectedImage} style={styles.profileImage}/>
                     <View style={styles.changeContainer}>
                         <Text style={styles.changeText}>Change</Text>
                     </View>
@@ -93,7 +76,7 @@ const Settings = () => {
                 <Text style={[styles.textH2Style, styles.marginTop5]}>Profile Name</Text>
             </View>
             <View style={styles.settingsContainer}>
-                <SettingsBox />
+                <SettingsBox/>
             </View>
         </View>
     )
