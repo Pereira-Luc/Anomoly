@@ -1,13 +1,20 @@
 import * as ImagePicker from "expo-image-picker";
 
-const checkPermissions = async (cameraGranted = null, status = null) => {
+const checkPermissionsCamera = async (cameraGranted: boolean): Promise<boolean> => {
+    console.log('cameraGranted', cameraGranted);
+
     if (!cameraGranted) {
         alert('You need to enable camera permissions to work');
-        return;
+        return false;
     }
-    if (status !== 'granted' && status !== null) {
+    return true;
+}
+
+const checkPermissionsGallery = async (status: string): Promise<boolean> => {
+    console.log('status', status);
+    if (status !== 'granted') {
         alert('You need to enable gallery permissions to work');
-        return;
+        return false;
     }
     return true;
 }
@@ -24,6 +31,7 @@ export const showPicMenu = async (showActionSheetWithOptions = null) => {
     const chooseFromGalleryIndex = 1;
 
     return new Promise((resolve, reject) => {
+        // @ts-ignore
         showActionSheetWithOptions(
             {
                 options,
@@ -35,7 +43,7 @@ export const showPicMenu = async (showActionSheetWithOptions = null) => {
                     case takePhotoIndex:
                         // Take Photo
                         //Check permissions
-                        if (!await checkPermissions(cameraGranted)) {
+                        if (!await checkPermissionsCamera(cameraGranted)) {
                             reject(new Error('Camera permission not granted'));
                             return;
                         }
@@ -59,7 +67,7 @@ export const showPicMenu = async (showActionSheetWithOptions = null) => {
                     case chooseFromGalleryIndex:
                         // Choose From Gallery
                         //Check permissions
-                        if (!await checkPermissions(status)) {
+                        if (!await checkPermissionsGallery(status)) {
                             reject(new Error('Gallery permission not granted'));
                             return;
                         }
