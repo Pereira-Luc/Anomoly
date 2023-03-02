@@ -13,7 +13,6 @@ const Settings = () => {
     const {showActionSheetWithOptions} = useActionSheet();
     const [selectedImage, setSelectedImage] = useState(require('../assets/icons/profile.png'));
 
-
     useEffect(() => {
         (async () => {
             //This function will also check if the user has a profile picture stored online once we have a database

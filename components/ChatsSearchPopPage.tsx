@@ -10,7 +10,7 @@ import {Portal} from "react-native-portalize";
 import styles from "../styles/mainstyle";
 
 
-const ChatSearchPopPage = ({visible, setVisible}) => {
+const ChatSearchPopPage = ({visible, setVisible}: any) => {
 
     const bottomSheetRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['90%', '90%'], []);

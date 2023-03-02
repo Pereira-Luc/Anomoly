@@ -4,10 +4,10 @@
     "slug": "Anomoly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/img/Anomoly.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/img/Anomoly.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },

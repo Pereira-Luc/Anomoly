@@ -1,13 +1,12 @@
-import React, {useEffect} from "react";
-import {Animated, LayoutAnimation, Pressable, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, {useEffect, useState} from "react";
+import {Animated, Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "../styles/mainstyle";
-import { useState } from 'react';
 import {pressIn, pressOut} from "../animations/pressAnimation";
 import {fadeInAnimation} from "../animations/fadeAnimation";
 import {useNavigation} from "@react-navigation/native";
 
 
-const LoginForm = ({setLogin}) => {
+const LoginForm = ({setLogin}: any) => {
     let navigation = useNavigation();
     const submitLogin = () => {
         console.log("Login Submitted");
@@ -29,7 +28,7 @@ const LoginForm = ({setLogin}) => {
 
     useEffect(() => fadeInAnimation(animationDuration,visible,fadeAnim), [visible]);
 
-    const combinedFunction = (setLogin, setVisible) => {
+    const combinedFunction = (setLogin: any, setVisible: any) => {
         setTimeout(() => {
             setLogin(false);
         }, animationDuration);

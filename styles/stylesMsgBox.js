@@ -1,5 +1,4 @@
-import {Dimensions, Platform} from "react-native";
-import {StyleSheet} from "react-native";
+import {Dimensions, Platform, StyleSheet} from "react-native";
 
 const stylesMsgBox = StyleSheet.create({
     MsgBox: {
@@ -61,6 +60,12 @@ const stylesMsgBox = StyleSheet.create({
         //Prevent the text from going to the next line
         flexShrink: 1,
 
+    },
+    pfPicImg: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#000000',
+        borderRadius: 100,
     }
 })
 
