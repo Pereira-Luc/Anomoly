@@ -15,7 +15,7 @@ const Chats = () => {
     };
 
     return (
-        <View style={styles.mainContainer}>
+        <View style={[styles.mainContainer]}>
             <View style={styles.head}>
                 <View style={styles.spacer}></View>
                 <View style={styles.header}>
@@ -44,6 +44,16 @@ const Chats = () => {
                 <MsgBox
                     lastMsg="Test Length of message before breaking everything. Test Length of message before breaking everything. Test Length of message before breaking everything"
                     nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <MsgBox lastMsg="Test Length of message" nameOfUser="John" date="12:00"/>
+                <View style={styles.footerClear}></View>
             </ScrollView>
             <ChatsSearchPopPage visible={visible} setVisible={setVisible}/>
         </View>
