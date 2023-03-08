@@ -52,11 +52,10 @@ export function MsgRoom() {
                     <View style={stylesMsgRoom.container}>
                         <View style={stylesMsgRoom.msgInputContainer}>
                             <TextInput style={stylesMsgRoom.msgInput}></TextInput>
-                            <View style={stylesMsgRoom.msgInputContainerCenter}>
-                                <TouchableOpacity style={stylesMsgRoom.sendButton}>
-                                    <Image style={stylesMsgRoom.sendButtonImg} source={require("../assets/icons/send.png")}/>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity style={stylesMsgRoom.sendButton}>
+                                <Image style={stylesMsgRoom.sendButtonImg}
+                                       source={require("../assets/icons/send.png")}/>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
