@@ -22,7 +22,6 @@ const authLink = setContext(async (_, {headers}) => {
 
     // Get the token from the authPayload
     const token = authPayloadObject.login.token;
-    console.log("Token: " + token);
 
     // return the headers to the context so httpLink can read them
     return {
@@ -32,9 +31,6 @@ const authLink = setContext(async (_, {headers}) => {
         }
     }
 });
-
-console.log("Apollo Client initialized");
-console.log(authLink);
 
 
 // Initialize Apollo Client
