@@ -1,16 +1,21 @@
 import {Dimensions, Platform, StyleSheet} from "react-native";
+import {colors} from "./colors/colors";
 
 const stylesMsgBox = StyleSheet.create({
     MsgBox: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: 'rgba(0,255,157,0.51)',
+        //borderColor: 'rgba(0,255,157,0.51)',
         borderBottomWidth: 0.5,
         marginLeft: '2%',
         marginRight: '2%',
         padding: '1%',
-        backgroundColor: '#000000',
+        backgroundColor: colors.secondaryBackground,
+        borderRadius: 10,
+        marginBottom: 5,
+        //Shadow
+        shadowColor: 'rgba(0,255,157,0.51)',
     },
     lastMsg: {
         color: '#9a9a9a',
