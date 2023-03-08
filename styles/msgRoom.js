@@ -1,5 +1,5 @@
-import {Dimensions} from "react-native";
-import {StyleSheet} from "react-native";
+import {Dimensions, Platform, StyleSheet} from "react-native";
+import {colors} from "./colors/colors";
 
 const stylesMsgRoom = StyleSheet.create({
     MsgBox: {
@@ -17,7 +17,7 @@ const stylesMsgRoom = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#151515',
+        backgroundColor: colors.primaryBackground,
         paddingBottom: '2%',
     },
     spacer: {
@@ -29,7 +29,7 @@ const stylesMsgRoom = StyleSheet.create({
         marginLeft: '5%',
         display: 'flex',
         top: '0%',
-        backgroundColor: '#e52929',
+        backgroundColor: '#00ff9d',
         width: Dimensions.get('window').width * 0.10,
         height: Dimensions.get('window').width * 0.10,
         borderRadius: 100,
@@ -42,24 +42,32 @@ const stylesMsgRoom = StyleSheet.create({
     },
     containerMain: {
         display: 'flex',
-        backgroundColor: '#151515',
+        backgroundColor: colors.primaryBackground,
     }, head: {
         position: 'absolute',
         width: '100%',
         height: Dimensions.get('window').height * 0.11,
-        backgroundColor: '#151515',
+        backgroundColor: colors.primaryBackground,
     }, footer: {
-        backgroundColor: '#151515',
-        width: '100%',
-        height: Dimensions.get('window').height * 0.1,
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: colors.secondaryBackground,
+        width: '95%',
+        height: Dimensions.get('window').height * 0.09,
+        marginLeft: '2.5%',
+        borderRadius: 50,
+        bottom: 20,
     }, msgInput: {
         backgroundColor: '#232323',
-        width: '75%',
+        width: Platform.OS === 'ios' ? '82%' : '80%',
+        height: '100%',
         borderRadius: 15,
-        marginTop: '3%',
-        marginLeft: '3%',
         borderColor: 'rgba(0,255,157,0.32)',
         borderWidth: 1,
+
 
     },sendButton: {
         backgroundColor: '#3f3f3f',
@@ -69,9 +77,6 @@ const stylesMsgRoom = StyleSheet.create({
         //Center the text
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '3%',
-        marginLeft: '3%',
-
     }
     , container: {
         display: 'flex',
@@ -80,6 +85,8 @@ const stylesMsgRoom = StyleSheet.create({
     }, msgInputContainer: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     }, msgInputContainerCenter: {
         display: 'flex',
         flexDirection: 'row',
@@ -90,10 +97,10 @@ const stylesMsgRoom = StyleSheet.create({
         marginLeft: '3%',
     },background: {
         width: Dimensions.get('window').width * 1.1,
-        height: Dimensions.get('window').height * 0.8,
+        height: Dimensions.get('window').height * 0.9,
         left: -Dimensions.get('window').width * 0.08,
-        tintColor: '#111111',
-        backgroundColor: '#000000',
+        tintColor: colors.primaryBackground,
+        backgroundColor: colors.primaryBackgroundVeryDark,
     },
     sendButtonImg: {
         width: 20,

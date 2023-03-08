@@ -1,4 +1,6 @@
 import {Dimensions, Platform, StyleSheet} from "react-native";
+import {colors} from "./colors/colors";
+
 
 export default StyleSheet.create({
     input: {
@@ -57,7 +59,8 @@ export default StyleSheet.create({
     },
     mainContainer: {
         flex: 1,
-        backgroundColor: '#000000',
+        //Use primaryBackground color
+        backgroundColor: colors.primaryBackground,
     },
     spacer: {
         top: '0%',
@@ -94,7 +97,7 @@ export default StyleSheet.create({
     searchBox: {
         margin: '5%',
         marginTop: '2%',
-        backgroundColor: 'rgba(255,255,255,0.15)',
+        backgroundColor: colors.secondaryBackground,
         borderRadius: 10,
         padding: '3%',
         color: '#ffffff',
@@ -102,12 +105,19 @@ export default StyleSheet.create({
         fontSize: (Platform.OS === 'ios') ? 20 : 16,
     },
     footer: {
-        height: '8%',
-        backgroundColor: '#151515',
+        position: 'absolute',
+        height: '9%',
+        backgroundColor: colors.primaryBackgroundDark,
+        //backgroundColor: '#f50000',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
+        alignItems: 'center',
         bottom: 0,
+        borderRadius: 50,
+        margin: '2.5%',
+        marginBottom: 18,
+        width: '95%',
     },
     msgScroll: {
         overflow: 'visible',
@@ -130,7 +140,7 @@ export default StyleSheet.create({
         width: (Platform.OS === 'ios') ? 35 : 30,
         height: (Platform.OS === 'ios') ? 35 : 30,
         //Invert colors
-        tintColor: '#00ff9d',
+        tintColor: colors.primaryDetail,
     },
     centerTextHorizontal: {
         display: 'flex',
@@ -172,7 +182,7 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
     settingBox: {
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: colors.secondaryBackground,
         borderRadius: (Platform.OS === 'ios') ? 10 : 10,
         padding: '3%',
         color: '#ffffff',
@@ -198,13 +208,13 @@ export default StyleSheet.create({
         width: '90%',
         height: '95%',
         //Invert colors
-        tintColor: '#00ff9d',
+        tintColor: colors.primaryDetail,
     },bubbleButtonRightImg: {
         fontSize: (Platform.OS === 'ios') ? 20 : 15,
         width: '100%',
         height: '100%',
         //Invert colors
-        color: '#00ff9d',
+        color: colors.primaryDetail,
     },
     head: {
         backgroundColor: 'rgba(0,255,157,0)',
@@ -222,8 +232,25 @@ export default StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.6)', // semi-transparent background
         ...StyleSheet.absoluteFillObject, // fills entire screen
         zIndex: 1, // ensures this style appears on top of other styles
+    },
+    errorBox: {
+        backgroundColor: colors.primaryDetail,
+        position: 'absolute',
+        width: '100%',
+        bottom: '110%',
+        borderRadius: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '5%',
+        borderBottomLeftRadius: 0,
+    }, errorText: {
+        color: '#000000',
+        padding: '2%',
+    },
+    footerClear: {
+        height: Platform.OS === 'ios' ? 105 : 90,
+        width: '100%',
     }
-
 })
 
 

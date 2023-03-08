@@ -1,4 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+import {colors} from "./colors/colors";
 
 const stylesChatReceive = StyleSheet.create({
     MsgBox: {
@@ -22,7 +23,7 @@ const stylesChatReceive = StyleSheet.create({
     },
     textBubble: {
         maxWidth: Dimensions.get('window').width * 0.80,
-        backgroundColor: '#AAB',
+        backgroundColor: colors.lightMajor,
         //left bottom border radius is 0 to make it look like a speech bubble
         borderRadius: 10,
         borderBottomLeftRadius: 2,
