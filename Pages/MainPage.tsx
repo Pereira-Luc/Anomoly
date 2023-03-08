@@ -20,7 +20,7 @@ const MainPage = () => {
                     {page === "Groups" ? <Groups/> : null}
                     {page === "Settings" ? <Settings/> : null}
                     <View style={styles.footer}>
-                        <TouchableOpacity style={[styles.groupsButtonFooter, styles.footerButton]}
+                        <TouchableOpacity style={[styles.footerButton]}
                                           onPress={() => setPage("Groups")}>
                             <Image source={require('../assets/icons/group1.png')}
                                    style={[styles.footerImg, page === "Groups" && styles.footerImgActive]}></Image>
