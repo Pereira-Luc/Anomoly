@@ -7,11 +7,13 @@ import {showPicMenu} from "../Functions/cameraMenu";
 import {useEffect, useState} from "react";
 import * as FileSystem from 'expo-file-system';
 import * as SecureStore from 'expo-secure-store';
+import {AuthPayload} from "../interfaces/AuthPayload";
 
 const Settings = () => {
 
     const {showActionSheetWithOptions} = useActionSheet();
     const [selectedImage, setSelectedImage] = useState(require('../assets/icons/profile.png'));
+    const [username, setUsername] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -21,9 +23,21 @@ const Settings = () => {
         })();
     }, []);
 
+    (async () => {
+        //Get authPayload from local storage
+        let authPayload = await SecureStore.getItemAsync('authPayload');
+        // Convert the Json string to a Json object
+        if (authPayload === null) {
+            return
+        }
+        const authPayloadObject: AuthPayload = JSON.parse(authPayload);
+        setUsername(authPayloadObject.login.user.username);
+    })();
+
 
     const changeProfilePic = async () => {
         try {
+            // @ts-ignore
             let result = await showPicMenu(showActionSheetWithOptions)
 
             console.log(result);
@@ -71,7 +85,7 @@ const Settings = () => {
                         <Text style={styles.changeText}>Change</Text>
                     </View>
                 </TouchableOpacity>
-                <Text style={[styles.textH2Style, styles.marginTop5]}>Profile Name</Text>
+                <Text style={[styles.textH2Style, styles.marginTop5]}>{username}</Text>
             </View>
             <View style={styles.settingsContainer}>
                 <SettingsBox/>
