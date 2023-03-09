@@ -48,5 +48,15 @@ export default StyleSheet.create({
         tintColor: colors.primaryDetail,
         width: Platform.OS === 'ios' ? 30 : 25,
         height: Platform.OS === 'ios' ? 30 : 25,
+    },
+    pfAddButtonText: {
+        color: colors.primaryDetail,
+    },
+    pfAddButtonB: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: Platform.OS === 'ios' ? 100 : 90,
+        height: Platform.OS === 'ios' ? 60 : 50,
     }
 });
