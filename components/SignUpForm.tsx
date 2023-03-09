@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {Animated, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, Animated, Keyboard, Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "../styles/mainstyle";
 import {pressIn, pressOut} from "../animations/pressAnimation";
 import {fadeInAnimation} from "../animations/fadeAnimation";
-
+import {ApolloError, useMutation} from "@apollo/client";
+import {SIGNUP_QUERY} from "../constants/graphql/querys/signUpQuery";
+import * as SecureStore from "expo-secure-store";
 
 const SignUpForm = ({setLogin}: any) => {
-    const submitSignUp = () => {
-        console.log("SignUp Submitted");
-        console.log(username);
-        console.log(password)
-        console.log(passwordConfirm)
-    }
+
+
+    let [submitLogin, {loading, error, data}] = useMutation(SIGNUP_QUERY);
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -22,7 +21,7 @@ const SignUpForm = ({setLogin}: any) => {
 
     const animationDuration = 200;
 
-    useEffect(() => fadeInAnimation(animationDuration,visible,fadeAnim), [visible]);
+    useEffect(() => fadeInAnimation(animationDuration, visible, fadeAnim), [visible]);
 
     const combinedFunction = (setLogin: any, setVisible: any) => {
         setTimeout(() => {
@@ -31,18 +30,61 @@ const SignUpForm = ({setLogin}: any) => {
         setVisible(!visible);
     }
 
+    const submitSignUp = async () => {
+        //TODO: Generate Identity Key Pair and pass it to the mutation
+
+        console.log("SignUp Submitted");
+        Keyboard.dismiss();
+        try {
+            await submitLogin({variables: {username: username, password: password, confirmPassword: passwordConfirm}});
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    // Errors come in as an array of string and the decided by a comma for all errors
+    // This function will split the string by the comma and return an array of strings
+    const splitErrors = (errors: ApolloError) => {
+        let errorString = errors.message;
+        return errorString.split(',');
+    }
+
+    const navigateToMainPage = (data: any) => {
+        console.log(typeof data);
+        //Convert data to string JSON
+        data = JSON.stringify(data);
+
+        SecureStore.setItemAsync('authPayload', data).then(() => {
+            setTimeout(() => {
+                // @ts-ignore
+                navigation.navigate('MainPage');
+                console.log("Navigating to Main Page");
+            }, animationDuration);
+        });
+    }
+
+
     return (
         <View style={styles.inputBody}>
-            <Animated.View style={{ opacity: fadeAnim }}>
-            <TextInput placeholder="Username" style={styles.input}
-                       onChangeText={(username) => setUsername(username)}
-                       value={username} placeholderTextColor={'#ffffff'}
-            ></TextInput>
-            <TextInput placeholder="Password" style={styles.input}
-                       onChangeText={(password) => setPassword(password)}
-                       value={password} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
-            ></TextInput>
-            <TextInput placeholder="Password Confirm" style={styles.input}
+            <Animated.View style={{opacity: fadeAnim}}>
+                {data && navigateToMainPage(data)}
+                {loading && <ActivityIndicator size="large" color="#ffffff"/>}
+                {error ? (<View style={styles.errorBox}>
+                    {splitErrors(error).map((errorMsg, index) => {
+                        return <Text key={index} style={styles.errorText}>{errorMsg}</Text>
+                    })
+                    }
+                </View>) : null}
+
+                <TextInput placeholder="Username" style={styles.input}
+                           onChangeText={(username) => setUsername(username)}
+                           value={username} placeholderTextColor={'#ffffff'}
+                ></TextInput>
+                <TextInput placeholder="Password" style={styles.input}
+                           onChangeText={(password) => setPassword(password)}
+                           value={password} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
+                ></TextInput>
+                <TextInput placeholder="Password Confirm" style={styles.input}
                        onChangeText={(passwordConfirm) => setPasswordConfirm(passwordConfirm)}
                        value={passwordConfirm} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
             ></TextInput>
