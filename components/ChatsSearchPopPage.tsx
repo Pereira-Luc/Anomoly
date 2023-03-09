@@ -21,9 +21,14 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
 
     let [searchText, setSearchText] = React.useState("");
 
-
     //Get Search Results from API SEARCH_QUERY
-    let {error, data} = useQuery(SEARCH_QUERY, {variables: {v: searchText}});
+    let {error, data} = useQuery(SEARCH_QUERY, {
+        variables:
+            {
+                v: searchText
+            },
+        fetchPolicy: 'cache-and-network',
+    });
 
 
     if (error) console.log(error.message);
@@ -61,7 +66,8 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
                             data={data && data.searchUser}
                             renderItem={({item, index}) => {
                                 //console.log("Iteams: " , item.userId);
-                                return (<ProfileSearchBox username={item.username} userID={item.userId}/>)
+                                return (<ProfileSearchBox username={item.username}
+                                                          friendRequestStatus={item.friendRequestStatus}/>)
                             }}
                             keyExtractor={item => item.userId}/>
                     </View>
