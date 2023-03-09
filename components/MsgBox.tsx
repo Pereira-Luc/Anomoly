@@ -2,21 +2,24 @@ import {Image, Text, TouchableOpacity, View} from "react-native";
 import stylesMsgBox from "../styles/stylesMsgBox";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {useNavigation} from "@react-navigation/native";
+//https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/swipeable/
 
-export function MsgBox({lastMsg, nameOfUser, date}: any) {
+// Maybe interesting for later: https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/drawer-layout
+
+export function MsgBox({lastMsg, nameOfUser, date}: String | any) {
     let navigation = useNavigation();
     const onDelete = () => {
         console.log("Delete");
     }
 
-    const renderRightView = () => {
+    const renderRightView = (): JSX.Element => {
         return (
             <TouchableOpacity onPress={onDelete} style={stylesMsgBox.deleteButtonContainer}>
                 <Text style={stylesMsgBox.deleteButtonText}>Delete</Text>
             </TouchableOpacity>)
     };
 
-    const openChat = () => {
+    const openChat = (): void => {
         console.log("Open chat");
         //Navigate to MsgRoom
         // @ts-ignore
@@ -25,6 +28,7 @@ export function MsgBox({lastMsg, nameOfUser, date}: any) {
 
     return (
         <Swipeable
+            friction={2}
             renderRightActions={() =>
                 renderRightView()
             }>
