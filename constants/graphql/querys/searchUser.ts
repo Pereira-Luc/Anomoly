@@ -5,6 +5,10 @@ export const SEARCH_QUERY = gql`
         searchUser(v: $v) {
             userId
             username
+            friendRequestStatus {
+                status
+                needToAcceptBy
+            }
         }
     }
 `;
