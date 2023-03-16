@@ -27,7 +27,7 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
             {
                 v: searchText
             },
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: 'network-only',
     });
 
 
