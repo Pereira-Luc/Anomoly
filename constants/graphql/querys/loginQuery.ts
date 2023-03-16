@@ -7,7 +7,7 @@ export const LOGIN_QUERY = gql`
             token
             tokenExpiration
             user {
-                userId
+                _id
                 username
             }
         }
