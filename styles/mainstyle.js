@@ -250,6 +250,7 @@ export default StyleSheet.create({
     footerClear: {
         height: Platform.OS === 'ios' ? 105 : 90,
         width: '100%',
+        backgroundColor: 'rgba(255,0,0,0)',
     }
 })
 

@@ -106,18 +106,22 @@ const stylesMsgRoom = StyleSheet.create({
         width: 20,
         height: 20,
         tintColor: '#00ff9d',
-    },nameOfUser: {
+    }, nameOfUser: {
         justifyContent: "center",
         color: '#ffffff',
     },
     nameOfUserText: {
         color: '#ffffff',
         fontSize: 20,
-    },detailsText: {
+    }, detailsText: {
         color: '#00ff9d',
         fontSize: (Platform.OS === 'ios') ? 20 : 15,
+    },
+    footerClear: {
+        height: Platform.OS === 'ios' ? 105 : 90,
+        width: '100%',
+        backgroundColor: 'rgba(0,0,0,0)',
     }
-
 
 
 })
