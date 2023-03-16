@@ -1,14 +1,14 @@
-import {TouchableHighlight, View, Text} from "react-native";
+import {Text, TouchableHighlight, View} from "react-native";
 import stylesChatSend from "../styles/chatSend";
 
 
-export function ChatSend() {
+export function ChatSend({msg, date}: { msg: string, date: string }) {
     return (
         <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" style={stylesChatSend.rightSide}>
             <View style={stylesChatSend.MsgBox}>
                 <View style={stylesChatSend.textContent}>
                     <View style={stylesChatSend.textBubble}>
-                        <Text style={stylesChatSend.textBubblePadding}>t t t t t t t t t t t tt t t t t t tt t </Text>
+                        <Text style={stylesChatSend.textBubblePadding}>{msg}</Text>
                     </View>
                 </View>
             </View>
