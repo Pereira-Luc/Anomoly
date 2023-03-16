@@ -6,7 +6,7 @@ export const SIGNUP_QUERY = gql`
             token
             tokenExpiration
             user {
-                userId
+                _id
                 username
             }
         }
