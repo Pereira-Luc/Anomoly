@@ -9,6 +9,7 @@ export const LOGIN_QUERY = gql`
             user {
                 _id
                 username
+                publicKey
             }
         }
     }
