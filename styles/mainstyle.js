@@ -251,7 +251,59 @@ export default StyleSheet.create({
         height: Platform.OS === 'ios' ? 105 : 90,
         width: '100%',
         backgroundColor: 'rgba(255,0,0,0)',
+    }, privateKeyBox: {
+        backgroundColor: colors.secondaryBackground,
+        borderRadius: (Platform.OS === 'ios') ? 10 : 10,
+        padding: '3%',
+        color: '#ffffff',
+        marginTop: '20%',
+        minWidth: '90%',
+        maxWidth: '90%',
+    }, privateKeyBoxHeader: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderRadius: 10,
+        padding: '3%',
+        marginBottom: '3%',
+    }, privateKeyBoxHeaderTitle: {
+        fontSize: (Platform.OS === 'ios') ? 20 : 16,
+        fontWeight: 'bold',
+        color: colors.primaryDetailInformation,
+    }, privateKeyBoxBody: {
+        borderRadius: (Platform.OS === 'ios') ? 10 : 10,
+        padding: '3%',
+    }, privateKeyText: {
+        color: '#ff0000',
+        backgroundColor: colors.primaryBackgroundDark,
+        padding: '5%',
+        borderRadius: 10,
+        marginBottom: '5%',
+    }, privateKeyCopyInfo: {
+        color: colors.primaryDetail,
+        fontSize: (Platform.OS === 'ios') ? 15 : 12,
+        marginTop: -10,
+        marginBottom: 20,
+    },
+    privateKeyBoxButton: {
+        backgroundColor: colors.primaryDetail,
+        borderRadius: 10,
+        padding: '3%',
+        marginTop: '5%',
+    }, privateKeyBoxButtonText: {
+        color: '#000000',
+        fontSize: (Platform.OS === 'ios') ? 15 : 12,
+        textAlign: 'center',
+    },
+    privateKeyBoxButtonClose: {
+        backgroundColor: colors.primaryDetailInformation,
+        borderRadius: 10,
+        padding: '3%',
+        marginTop: '5%',
+        width: '100%',
     }
+
 })
 
 
