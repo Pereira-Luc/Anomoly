@@ -8,4 +8,5 @@ export const colors = {
     primaryForeground: 'rgb(68, 71, 90)',
     primaryDetail: '#00ff9d',
     lightMajor: 'rgb(147,153,194)',
+    primaryDetailInformation: 'rgb(255,204,0)',
 }
