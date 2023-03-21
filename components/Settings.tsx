@@ -7,13 +7,15 @@ import {showPicMenu} from "../Functions/cameraMenu";
 import {useEffect, useState} from "react";
 import * as FileSystem from 'expo-file-system';
 import * as SecureStore from 'expo-secure-store';
-import {AuthPayload} from "../interfaces/AuthPayload";
+import {useNavigation} from "@react-navigation/native";
 
 const Settings = () => {
 
     const {showActionSheetWithOptions} = useActionSheet();
     const [selectedImage, setSelectedImage] = useState(require('../assets/icons/profile.png'));
-    const [username, setUsername] = useState('');
+    //@ts-ignore
+    const username = global.LOGGED_IN_USER.username
+    const navigation = useNavigation();
 
     useEffect(() => {
         (async () => {
@@ -22,17 +24,6 @@ const Settings = () => {
             setSelectedImage({uri: profilePic});
         })();
     }, []);
-
-    (async () => {
-        //Get authPayload from local storage
-        let authPayload = await SecureStore.getItemAsync('authPayload');
-        // Convert the Json string to a Json object
-        if (authPayload === null) {
-            return
-        }
-        const authPayloadObject: AuthPayload = JSON.parse(authPayload);
-        setUsername(authPayloadObject.login.user.username);
-    })();
 
 
     const changeProfilePic = async () => {
@@ -72,6 +63,16 @@ const Settings = () => {
         }
     }
 
+    const logout = () => {
+        console.log("Logging out");
+        // clear the SecureStore of authPayload
+        SecureStore.deleteItemAsync('authPayload').then(r => {
+            //Go back to settings page
+            // @ts-ignore
+            navigation.navigate('StartPage');
+        });
+    }
+
     return (
         <View style={styles.mainContainer}>
             <View style={styles.spacer}></View>
@@ -88,7 +89,7 @@ const Settings = () => {
                 <Text style={[styles.textH2Style, styles.marginTop5]}>{username}</Text>
             </View>
             <View style={styles.settingsContainer}>
-                <SettingsBox/>
+                <SettingsBox onPressFunction={logout} settingName="Logout" settingInfo="Logging out"/>
             </View>
         </View>
     )

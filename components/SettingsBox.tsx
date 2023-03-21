@@ -1,13 +1,13 @@
-import {Text, View} from "react-native";
+import {Text, TouchableOpacity} from "react-native";
 import styles from "../styles/mainstyle";
 
 
-const SettingsBox = () => {
+const SettingsBox = ({onPressFunction, settingName, settingInfo}: any) => {
     return (
-       <View style={styles.settingBox}>
-           <Text style={styles.textH2Style}>Setting</Text>
-           <Text style={styles.textH3Style}>InfoSetting</Text>
-       </View>
+        <TouchableOpacity style={styles.settingBox} onPress={() => onPressFunction()}>
+            <Text style={styles.textH2Style}>{settingName}</Text>
+            <Text style={styles.textH3Style}>{settingInfo}</Text>
+        </TouchableOpacity>
     )
 }
 
