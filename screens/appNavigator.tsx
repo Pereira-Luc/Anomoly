@@ -5,10 +5,14 @@ import StartPage from "../Pages/StartPage"
 import MainPage from "../Pages/MainPage";
 import MsgRoom from "../Pages/MsgRoom";
 import * as SecureStore from "expo-secure-store";
+import {AuthPayload} from "../interfaces/AuthPayload";
 
-const { Navigator, Screen } = createStackNavigator();
+
+const {Navigator, Screen} = createStackNavigator();
+
 
 const AppNavigator = () => {
+
 
     let [initialRouteName, setInitialRouteName] = useState("");
 
@@ -17,8 +21,15 @@ const AppNavigator = () => {
     useEffect(() => {
         SecureStore.getItemAsync('authPayload').then((authPayload) => {
             if (authPayload) {
+                //clear authPayload from secure store temporarily
+                //SecureStore.deleteItemAsync('authPayload').then(r => console.log(r));
+
+                const authPayloadObject: AuthPayload = JSON.parse(authPayload);
+
+                // @ts-ignore
+                global.LOGGED_IN_USER = authPayloadObject.user
+
                 setInitialRouteName("MainPage");
-                //reload the page
             } else {
                 setInitialRouteName("StartPage");
             }
