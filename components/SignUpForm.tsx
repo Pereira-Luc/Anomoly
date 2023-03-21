@@ -7,10 +7,37 @@ import {ApolloError, useMutation} from "@apollo/client";
 import {SIGNUP_QUERY} from "../constants/graphql/querys/signUpQuery";
 import * as SecureStore from "expo-secure-store";
 
-const SignUpForm = ({setLogin}: any) => {
+import {generateKeyPair} from "../Functions/crypto";
+import {encode as encodeBase64} from "@stablelib/base64";
 
+const SignUpForm = ({setLogin, setPrivateKey}: any) => {
+    const [userKeyPair, setUserKeyPair] = useState(generateKeyPair());
+    const publicKey = encodeBase64(userKeyPair.publicKey);
 
-    let [submitLogin, {loading, error, data}] = useMutation(SIGNUP_QUERY);
+    let [submitLogin, {loading, error, data}] = useMutation(SIGNUP_QUERY, {
+        onCompleted: (data) => {
+            let userId = data.signUp.user._id;
+
+            //Set Global username
+            // @ts-ignore
+            global.LOGGED_IN_USER = data.signUp.user
+
+            data = JSON.stringify(data.signUp);
+
+            //Store private key in secure store
+            /*storePrivateKeyPerUser(userId, encodeBase64(userKeyPair.secretKey)).then(r => {
+                console.log(r);
+            })*/
+
+            SecureStore.setItemAsync('authPayload', data).then(r => {
+                //Show private key to user and ask them to save it
+                //wait for animation to finish
+                setTimeout(() => {
+                    setPrivateKey(encodeBase64(userKeyPair.secretKey));
+                }, animationDuration);
+            });
+        }
+    });
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -31,12 +58,19 @@ const SignUpForm = ({setLogin}: any) => {
     }
 
     const submitSignUp = async () => {
-        //TODO: Generate Identity Key Pair and pass it to the mutation
 
         console.log("SignUp Submitted");
         Keyboard.dismiss();
         try {
-            await submitLogin({variables: {username: username, password: password, confirmPassword: passwordConfirm}});
+            console.log("Signing Up");
+            await submitLogin({
+                variables: {
+                    username: username,
+                    password: password,
+                    confirmPassword: passwordConfirm,
+                    publicKey: publicKey
+                }
+            });
         } catch (e) {
             console.log(e);
         }
@@ -49,25 +83,10 @@ const SignUpForm = ({setLogin}: any) => {
         return errorString.split(',');
     }
 
-    const navigateToMainPage = (data: any) => {
-        console.log(typeof data);
-        //Convert data to string JSON
-        data = JSON.stringify(data);
-
-        SecureStore.setItemAsync('authPayload', data).then(() => {
-            setTimeout(() => {
-                // @ts-ignore
-                navigation.navigate('MainPage');
-                console.log("Navigating to Main Page");
-            }, animationDuration);
-        });
-    }
-
 
     return (
         <View style={styles.inputBody}>
             <Animated.View style={{opacity: fadeAnim}}>
-                {data && navigateToMainPage(data)}
                 {loading && <ActivityIndicator size="large" color="#ffffff"/>}
                 {error ? (<View style={styles.errorBox}>
                     {splitErrors(error).map((errorMsg, index) => {
