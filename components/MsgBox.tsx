@@ -6,7 +6,7 @@ import {useNavigation} from "@react-navigation/native";
 
 // Maybe interesting for later: https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/drawer-layout
 
-export function MsgBox({lastMsg, nameOfUser, date, chatId}: String | any) {
+export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | any) {
     let navigation = useNavigation();
     const onDelete = () => {
         console.log("Delete");
@@ -23,7 +23,10 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId}: String | any) {
         console.log("Open chat");
         //Navigate to MsgRoom
         // @ts-ignore
-        navigation.navigate("MsgRoom", {chatRoomId: chatId, nameOfUser: nameOfUser});
+        navigation.navigate("MsgRoom", {chatRoomId: chatId, nameOfUser: nameOfUser, userInfo: userInfo});
+
+        //get UserInfos
+
     }
 
     return (
