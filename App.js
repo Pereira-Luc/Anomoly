@@ -3,7 +3,6 @@ import {useFonts} from 'expo-font';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './constants/graphql/clients';
 
-
 export default function App() {
 
   const [loaded] = useFonts({

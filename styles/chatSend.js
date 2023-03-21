@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 const stylesChatSend = StyleSheet.create({
     MsgBox: {
@@ -20,7 +20,7 @@ const stylesChatSend = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        right: Dimensions.get('window').width * 0.1,
+        right: Dimensions.get('window').width * 0.05,
     },textContent: {}
 })
 

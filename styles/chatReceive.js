@@ -27,7 +27,7 @@ const stylesChatReceive = StyleSheet.create({
         //left bottom border radius is 0 to make it look like a speech bubble
         borderRadius: 10,
         borderBottomLeftRadius: 2,
-        left: Dimensions.get('window').width * 0.06,
+        left: Dimensions.get('window').width * 0.1,
 
     }, textBubblePadding: {
         padding: Dimensions.get('window').width * 0.02,
