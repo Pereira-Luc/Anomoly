@@ -12,6 +12,8 @@ const MainPage = () => {
     //Default page is Chats
     const [page, setPage] = React.useState("Chats");
 
+    //TODO: Add a useEffect to check if the user is logged in, if not, redirect to the start page
+
     return (
         <Host>
             <ActionSheetProvider>

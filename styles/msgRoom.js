@@ -62,13 +62,13 @@ const stylesMsgRoom = StyleSheet.create({
         bottom: 20,
     }, msgInput: {
         backgroundColor: '#232323',
-        width: Platform.OS === 'ios' ? '82%' : '80%',
         height: '100%',
         borderRadius: 15,
         borderColor: 'rgba(0,255,157,0.32)',
         borderWidth: 1,
-
-
+        paddingLeft: '3%',
+        paddingRight: '3%',
+        color: '#ffffff',
     },sendButton: {
         backgroundColor: '#3f3f3f',
         width: 50,
@@ -87,6 +87,7 @@ const stylesMsgRoom = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        height: 40,
     }, msgInputContainerCenter: {
         display: 'flex',
         flexDirection: 'row',
@@ -120,7 +121,12 @@ const stylesMsgRoom = StyleSheet.create({
     footerClear: {
         height: Platform.OS === 'ios' ? 105 : 90,
         width: '100%',
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: 'rgba(255,0,0,0)',
+
+    }, headerClear: {
+        height: Platform.OS === 'ios' ? 105 : 90,
+        width: '100%',
+        backgroundColor: 'rgba(255,0,0,0)',
     }
 
 

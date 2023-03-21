@@ -1,0 +1,72 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}
+
+type AuthPayload {
+    token: String!
+    tokenExpiration: Int!
+    user: User!
+}
+
+type ChatFeed {
+    chatId: ID!
+    chatRoomName: String!
+    lastMessage: ChatMessage!
+    participants: [User]!
+}
+
+type ChatMessage {
+    message: String
+    messageTime: Datetime
+    receiver: String
+    sender: String
+}
+
+type ChatRoom {
+    chatId: ID
+    chatMessages: [ChatMessage]
+}
+
+type FriendRequestStatus {
+    needToAcceptBy: String
+    status: String!
+}
+
+type Mutation {
+    acceptRequest(friendUsername: String!): String!
+    createChatRoom(user: String!): String!
+    createFriends(friendUsername: String!): String!
+    sendMsg(chatId: ID!, message: String!, receiver: String!): ChatMessage!
+    signUp(confirmPassword: String!, password: String!, publicKey: Base64, username: String!): AuthPayload!
+}
+
+type Query {
+    fetchTest: String!
+    loadAllChatFeed: [ChatFeed]!
+    loadChatContent(chatId: ID!): [ChatMessage]!
+    loadFriends(status: String!): [User]!
+    login(password: String!, username: String!): AuthPayload!
+    searchUser(v: String!): [User]!
+    testLogin: String!
+}
+
+type Subscription {
+    chatRoomContent(chatId: ID!): ChatMessage!
+}
+
+type User {
+    _id: ID
+    chatId: ID
+    friendRequestStatus: FriendRequestStatus
+    password: String
+    publicKey: Base64!
+    username: String!
+}
+
+scalar Base64
+
+scalar Datetime
