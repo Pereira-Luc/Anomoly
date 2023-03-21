@@ -5,6 +5,11 @@ export const CHAT_FEED_QUERY = gql`
         loadAllChatFeed {
             chatId
             chatRoomName
+            participants {
+                _id
+                username
+                publicKey
+            }
             lastMessage {
                 message
                 sender
