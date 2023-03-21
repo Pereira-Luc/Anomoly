@@ -15,6 +15,7 @@ const getAuthToken = async () => {
     // get the authentication token from local storage if it exists
     //Get authPayload from local storage
     let authPayload = await SecureStore.getItemAsync('authPayload');
+
     // Convert the Json string to a Json object
     if (authPayload === null) {
         return null
@@ -22,7 +23,7 @@ const getAuthToken = async () => {
     const authPayloadObject: AuthPayload = JSON.parse(authPayload);
 
     // Get the token from the authPayload
-    return authPayloadObject.login.token;
+    return authPayloadObject.token;
 }
 
 const wsLink = new GraphQLWsLink(createClient({
