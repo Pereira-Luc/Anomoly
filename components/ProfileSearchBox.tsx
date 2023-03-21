@@ -2,14 +2,14 @@ import {ActivityIndicator, Image, Text, TouchableOpacity, View} from "react-nati
 import profileSearchBox from "../styles/profileSearchBox";
 import {useMutation} from "@apollo/client";
 import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/querys/addFriendQuery";
-import React, {useState} from "react";
-import * as SecureStore from "expo-secure-store";
-import {AuthPayload} from "../interfaces/AuthPayload";
+import React from "react";
+
 
 const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
 
     let [submitFriendRequest, {loading, error, data}] = useMutation(ADD_FRIEND_QUERY);
-    const [myUsername, setUsername] = useState('');
+    //@ts-ignore
+    const myUsername = global.LOGGED_IN_USER
 
     const addUser = async (username: String) => {
         console.log("Submitting Friend Request");
@@ -19,18 +19,6 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
             console.log(e);
         }
     }
-
-    //Get my username from secure store
-    (async () => {
-        //Get authPayload from local storage
-        let authPayload = await SecureStore.getItemAsync('authPayload');
-        // Convert the Json string to a Json object
-        if (authPayload === null) {
-            return
-        }
-        const authPayloadObject: AuthPayload = JSON.parse(authPayload);
-        setUsername(authPayloadObject.login.user.username);
-    })();
 
     let [acceptFriendRequest, {
         loading: loadingAcceptFR,
