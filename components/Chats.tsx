@@ -26,6 +26,7 @@ const Chats = () => {
     //Get Chat Feed from API CHAT_FEED_QUERY
     let {loading, error, data} = useQuery(CHAT_FEED_QUERY, {});
 
+    console.log("Chat Feed Data: ", data);
 
     const toggleBottomNavigationView = () => {
         console.log("Toggling Bottom Sheet");
@@ -60,7 +61,8 @@ const Chats = () => {
                 data={data && data.loadAllChatFeed}
                 renderItem={({item}) => {
                     return <MsgBox lastMsg={item.lastMessage.message} nameOfUser={item.chatRoomName}
-                                   date={"- " + getTimeFormat(item.lastMessage.messageTime)} chatId={item.chatId}/>
+                                   date={"- " + getTimeFormat(item.lastMessage.messageTime)} chatId={item.chatId}
+                                   userInfo={item.participants[0]}/>
                 }}
             >
                 <View style={styles.footerClear}></View>
