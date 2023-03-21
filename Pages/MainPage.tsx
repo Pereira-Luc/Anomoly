@@ -1,27 +1,46 @@
-import {Button, Dimensions, Pressable, ScrollView, Text, TextInput, View} from "react-native";
+import {Image, TouchableOpacity, View} from "react-native";
 import styles from "../styles/mainstyle";
+import Chats from "../components/Chats";
+import Groups from "../components/Groups";
+import Settings from "../components/Settings";
+
+import React from "react";
+import {ActionSheetProvider} from "@expo/react-native-action-sheet";
+import {Host} from "react-native-portalize";
 
 const MainPage = () => {
-    return (
-        <View style={styles.mainContainer}>
-            <View style={styles.spacer}></View>
-            <View style={styles.header}>
-                <View style={styles.bubbleButtonRight}>
-                    <Pressable ></Pressable>
-                </View>
-                <Text style={styles.textH1Style}>Chats</Text>
-                <View style={styles.bubbleButtonLeft}>
-                    <Pressable></Pressable>
-                </View>
-            </View>
-            <View style={styles.searchBox}>
-                <TextInput placeholder="Search"></TextInput>
-            </View>
-            <ScrollView>
+    //Default page is Chats
+    const [page, setPage] = React.useState("Chats");
 
-            </ScrollView>
-            <View style={styles.footer}></View>
-        </View >
+    //TODO: Add a useEffect to check if the user is logged in, if not, redirect to the start page
+
+    return (
+        <Host>
+            <ActionSheetProvider>
+                <View style={styles.mainContainer}>
+                    {page === "Chats" ? <Chats/> : null}
+                    {page === "Groups" ? <Groups/> : null}
+                    {page === "Settings" ? <Settings/> : null}
+                    <View style={styles.footer}>
+                        <TouchableOpacity style={[styles.footerButton]}
+                                          onPress={() => setPage("Groups")}>
+                            <Image source={require('../assets/icons/group1.png')}
+                                   style={[styles.footerImg, page === "Groups" && styles.footerImgActive]}></Image>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.chatsButtonFooter, styles.footerButton]}
+                                          onPress={() => setPage("Chats")}>
+                            <Image source={require('../assets/icons/chat1.png')}
+                                   style={[styles.footerImg, page === "Chats" && styles.footerImgActive]}></Image>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.settingButtonFooter, styles.footerButton]}
+                                          onPress={() => setPage("Settings")}>
+                            <Image source={require('../assets/icons/setting3.png')}
+                                   style={[styles.footerImg, page === "Settings" && styles.footerImgActive]}></Image>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </ActionSheetProvider>
+        </Host>
     )
 }
 
