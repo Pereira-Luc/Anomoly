@@ -4,9 +4,9 @@ export interface AuthPayload {
     tokenExpiration: number;
     user: {
         __typename: string;
-        userId: string;
+        _id: string;
         username: string;
         publicKey?: string;
-        privateKey?: Uint8Array;
+        privateKey?: string;
     };
 }
