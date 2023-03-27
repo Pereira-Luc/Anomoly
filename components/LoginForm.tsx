@@ -42,6 +42,9 @@ const LoginForm = ({setLogin, setPrivateKey}: any) => {
             return
         }
 
+        //add private key to global variable LOGGED_IN_USER
+        data.login.user.privateKey = success;
+
         //@ts-ignore
         global.LOGGED_IN_USER = data.login.user
 
