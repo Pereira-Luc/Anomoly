@@ -6,6 +6,9 @@ import React, {useState} from "react";
 import {CHAT_FEED_QUERY} from "../constants/graphql/querys/chatFeedQuery";
 import {useQuery} from "@apollo/client";
 import {FlatList} from "react-native-gesture-handler";
+import {decode as decodeBase64} from "@stablelib/base64";
+import {decrypt} from "../Functions/crypto";
+import {box} from "tweetnacl";
 
 const Chats = () => {
 
@@ -24,9 +27,11 @@ const Chats = () => {
     }
 
     //Get Chat Feed from API CHAT_FEED_QUERY
-    let {loading, error, data} = useQuery(CHAT_FEED_QUERY, {});
+    let {loading, error, data} = useQuery(CHAT_FEED_QUERY, {
+        // Check if the data changed every 500ms
+        //pollInterval: 2000,
+    });
 
-    console.log("Chat Feed Data: ", data);
 
     const toggleBottomNavigationView = () => {
         console.log("Toggling Bottom Sheet");
@@ -60,14 +65,34 @@ const Chats = () => {
             <FlatList
                 data={data && data.loadAllChatFeed}
                 renderItem={({item}) => {
-                    return <MsgBox lastMsg={item.lastMessage.message} nameOfUser={item.chatRoomName}
+                    const publicKey: Uint8Array = decodeBase64(item.participants[0].publicKey)
+                    //Check if private key is null
+                    // @ts-ignore
+                    if (global.LOGGED_IN_USER.privateKey == null) {
+                        return null
+                    }
+
+                    // @ts-ignore
+                    const privateKey: Uint8Array = decodeBase64(global.LOGGED_IN_USER.privateKey)
+
+                    const secretSharedKey = box.before(publicKey, privateKey);
+
+                    let decryptedMessage = "";
+                    try {
+                        decryptedMessage = decrypt(secretSharedKey, item.lastMessage.message)
+                    } catch (e) {
+                        console.log("Error decrypting message: ", e)
+                        decryptedMessage = item.lastMessage.message
+                    }
+
+                    return <MsgBox lastMsg={decryptedMessage} nameOfUser={item.chatRoomName}
                                    date={"- " + getTimeFormat(item.lastMessage.messageTime)} chatId={item.chatId}
                                    userInfo={item.participants[0]}/>
                 }}
             >
                 <View style={styles.footerClear}></View>
             </FlatList>
-            <ChatsSearchPopPage visible={visible} setVisible={setVisible}/>
+            {visible ? <ChatsSearchPopPage visible={visible} setVisible={setVisible}/> : null}
         </View>
     )
 }
