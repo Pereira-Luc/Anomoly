@@ -8,6 +8,9 @@ import {useEffect, useState} from "react";
 import * as FileSystem from 'expo-file-system';
 import * as SecureStore from 'expo-secure-store';
 import {useNavigation} from "@react-navigation/native";
+import {useMutation} from "@apollo/client";
+import {SAVE_PROFILE_PIC} from "../constants/graphql/querys/saveProfilePic";
+import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
 
 const Settings = () => {
 
@@ -17,10 +20,14 @@ const Settings = () => {
     const username = global.LOGGED_IN_USER.username
     const navigation = useNavigation();
 
+    const [saveProfilePic, {loading: mutationLoading, error: mutationError}] = useMutation(SAVE_PROFILE_PIC)
+
     useEffect(() => {
         (async () => {
             //This function will also check if the user has a profile picture stored online once we have a database
-            let profilePic = await SecureStore.getItemAsync('profilePic') ?? require('../assets/icons/profile.png');
+            let defaultImage = require('../assets/icons/profile.png');
+            let profilePic = await SecureStore.getItemAsync('profilePic') ?? defaultImage;
+
             setSelectedImage({uri: profilePic});
         })();
     }, []);
@@ -54,9 +61,34 @@ const Settings = () => {
                 to: docDirectoryUri,
             });
 
+
+            //Check size of image MAX 16MB
+            const info = await FileSystem.getInfoAsync(docDirectoryUri);
+            console.log(`File size: ${info.size} bytes`);
+
+            if (info.size === null || typeof info.size === 'undefined') {
+                return;
+            }
+
+
+            // Resize the image to something smaller
+            const resizedImage = await manipulateAsync(
+                docDirectoryUri,
+                [{resize: {width: 500}}],
+                {compress: 0.5, format: SaveFormat.JPEG, base64: true}
+            );
+
             setSelectedImage({uri: docDirectoryUri});
+
+            //Send base64 to database
+            saveProfilePic({variables: {image: resizedImage.base64}}).then(r => {
+                console.log(r);
+            }).catch(e => {
+                console.log(e);
+            })
+
             //Save uri to local storage
-            await SecureStore.setItemAsync('profilePic', docDirectoryUri);
+            await SecureStore.setItemAsync('profilePic', resizedImage.uri);
 
         } catch (e) {
             console.log(e);
