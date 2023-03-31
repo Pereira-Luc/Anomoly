@@ -20,6 +20,12 @@ export function MsgRoom({route}: any) {
     const nameOfUser = route.params.nameOfUser;
     const chatRoomId = route.params.chatRoomId;
     const userInfos = route.params.userInfo
+    const profileImageUri = route.params.profileImageUri;
+
+    //If there is no profileImageUri, get it from server
+    if (profileImageUri === null) {
+
+    }
 
 
     let [combinedData, setCombinedData] = useState<any[]>([]);
@@ -179,7 +185,10 @@ export function MsgRoom({route}: any) {
                         </TouchableOpacity>
                         <View style={stylesMsgRoom.nameOfUser}><Text
                             style={stylesMsgRoom.nameOfUserText}>{nameOfUser}</Text></View>
-                        <View style={stylesMsgRoom.bubbleButtonRight}></View>
+                        <View style={stylesMsgRoom.bubbleButtonRight}>
+                            {profileImageUri ?
+                                <Image style={stylesMsgRoom.profileImage} source={{uri: profileImageUri}}/> : null}
+                        </View>
                     </View>
                 </View>
             </View>

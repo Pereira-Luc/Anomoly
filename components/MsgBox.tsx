@@ -49,6 +49,8 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | a
     }
 
     useEffect(() => {
+        console.log("Get profile pic of user with id: " + userInfo.username + " should be nameOfUser " + nameOfUser);
+
         base64ToImage(userInfo.profilePic, 500).then((uri) => {
             setProfilePic(uri);
         }).catch((e) => {
