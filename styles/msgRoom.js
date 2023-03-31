@@ -127,6 +127,10 @@ const stylesMsgRoom = StyleSheet.create({
         height: Platform.OS === 'ios' ? 105 : 90,
         width: '100%',
         backgroundColor: 'rgba(255,0,0,0)',
+    }, profileImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 100,
     }
 
 
