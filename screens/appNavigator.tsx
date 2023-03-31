@@ -7,6 +7,7 @@ import MsgRoom from "../Pages/MsgRoom";
 import * as SecureStore from "expo-secure-store";
 import {AuthPayload} from "../interfaces/AuthPayload";
 import {getPrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
+import NotificationHandler from "../components/NotificationHandler";
 
 
 const {Navigator, Screen} = createStackNavigator();
@@ -54,6 +55,7 @@ const AppNavigator = () => {
                     <Screen name="MainPage" component={MainPage}/>
                     <Screen name="MsgRoom" component={MsgRoom}/>
                 </Navigator>
+                <NotificationHandler/>
             </NavigationContainer>
         )
     }

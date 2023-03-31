@@ -39,7 +39,7 @@ const MainPage = () => {
         fetchPolicy: "no-cache"
     });
 
-    (useEffect(() => {
+    useEffect(() => {
         const checkPushNotificationTokenAsync = async () => {
             console.log("checkPushNotificationTokenAsync");
             const token = await registerForPushNotificationsAsync()
@@ -47,11 +47,12 @@ const MainPage = () => {
                 checkPushNotificationToken();
                 return
             }
-
             console.log("No Permission for Push Notifications");
         }
 
-    }))
+        checkPushNotificationTokenAsync();
+
+    }, []);
 
     return (
         <Host>
