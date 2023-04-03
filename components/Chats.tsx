@@ -13,17 +13,30 @@ import {box} from "tweetnacl";
 const Chats = () => {
 
     const [visible, setVisible] = useState(false);
-    //Format Date Show time up to 24 hours ago and show day if older than 24 hours
+    //Format Date Shows time < 1h in minutes and > 1h in hours
+    //Time > 24h in days and > 7d in weeks and > 4w in months
     const getTimeFormat = (date: Date) => {
-        let d = new Date(date);
-        let now = new Date();
-        let diff = now.getTime() - d.getTime();
-        let diffHours = Math.floor(diff / 1000 / 60 / 60);
-        let diffDays = Math.floor(diff / 1000 / 60 / 60 / 24);
-        if (diffHours < 24) {
-            return diffHours + "h";
+        let d = new Date(date)
+        let now = new Date()
+        let diff = now.getTime() - d.getTime()
+        let diffInHours = diff / (1000 * 3600)
+        let diffInMinutes = diff / (1000 * 60)
+        let diffInDays = diff / (1000 * 3600 * 24)
+        let diffInWeeks = diff / (1000 * 3600 * 24 * 7)
+        let diffInMonths = diff / (1000 * 3600 * 24 * 7 * 4)
+        if (diffInHours < 1) {
+            return Math.round(diffInMinutes) + "m"
         }
-        return diffDays + "d";
+        if (diffInHours < 24) {
+            return Math.round(diffInHours) + "h"
+        }
+        if (diffInDays < 7) {
+            return Math.round(diffInDays) + "d"
+        }
+        if (diffInWeeks < 4) {
+            return Math.round(diffInWeeks) + "w"
+        }
+        return Math.round(diffInMonths) + "m"
     }
 
     //Get Chat Feed from API CHAT_FEED_QUERY
