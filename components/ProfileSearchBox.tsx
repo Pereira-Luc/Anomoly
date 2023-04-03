@@ -3,18 +3,21 @@ import profileSearchBox from "../styles/profileSearchBox";
 import {useMutation} from "@apollo/client";
 import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/querys/addFriendQuery";
 import React from "react";
+import {ID} from "graphql-ws/lib/common";
 
 
-const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
+const ProfileSearchBox = ({username, friendRequestStatus, userId}: any) => {
 
     let [submitFriendRequest, {loading, error, data}] = useMutation(ADD_FRIEND_QUERY);
-    //@ts-ignore
-    const myUsername = global.LOGGED_IN_USER
 
-    const addUser = async (username: String) => {
+    //@ts-ignore
+    const myId = global.LOGGED_IN_USER._id
+
+    const addUser = async (userId: ID) => {
         console.log("Submitting Friend Request");
+
         try {
-            await submitFriendRequest({variables: {friendUsername: username}})
+            await submitFriendRequest({variables: {friendId: userId}})
         } catch (e) {
             console.log(e);
         }
@@ -26,11 +29,11 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
         data: dataAcceptFR
     }] = useMutation(ACCEPT_FRIEND_REQUEST_QUERY);
 
-    const acceptRequest = async (username: String) => {
+    const acceptRequest = async (userId: ID) => {
         console.log("Accepting Friend Request");
 
         try {
-            await acceptFriendRequest({variables: {friendUsername: username}})
+            await acceptFriendRequest({variables: {friendId: userId}})
         } catch (e) {
             console.log(e);
         }
@@ -52,7 +55,7 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
                     {data && <Text style={profileSearchBox.pfAddButtonText}>Added</Text>}
                     {friendRequestStatus.status !== 'Undefined'
                         && friendRequestStatus.status !== 'Accepted'
-                        && friendRequestStatus.needToAcceptBy !== myUsername
+                        && friendRequestStatus.needToAcceptBy !== myId
                         && !data
                         && <Text style={profileSearchBox.pfAddButtonText}>{friendRequestStatus.status}</Text>}
 
@@ -60,13 +63,13 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
                                                                          source={require("../assets/icons/userAdded.png")}/>}
 
                     {friendRequestStatus.status === 'Undefined' && !data &&
-                        <TouchableOpacity onPress={() => addUser(username)} style={profileSearchBox.pfAddButtonB}>
+                        <TouchableOpacity onPress={() => addUser(userId)} style={profileSearchBox.pfAddButtonB}>
                             <Image style={profileSearchBox.pfAddButtonImg}
                                    source={require("../assets/icons/addUser.png")}/>
                         </TouchableOpacity>}
 
-                    {!dataAcceptFR && friendRequestStatus.needToAcceptBy === myUsername && !data &&
-                        <TouchableOpacity onPress={() => acceptRequest(username)}
+                    {!dataAcceptFR && friendRequestStatus.needToAcceptBy === myId && !data &&
+                        <TouchableOpacity onPress={() => acceptRequest(userId)}
                                           style={profileSearchBox.pfAddButtonB}>
                             <Text style={profileSearchBox.pfAddButtonText}>ACCEPT</Text>
                         </TouchableOpacity>}

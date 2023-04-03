@@ -27,11 +27,11 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
             {
                 v: searchText
             },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'no-cache',
     });
 
-
     if (error) console.log(error.message);
+
     return (
         <Portal>
             <BottomSheet
@@ -65,8 +65,7 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
                         <FlatList
                             data={data && data.searchUser}
                             renderItem={({item, index}) => {
-                                //console.log("Iteams: " , item.userId);
-                                return (<ProfileSearchBox username={item.username}
+                                return (<ProfileSearchBox userId={item._id} username={item.username}
                                                           friendRequestStatus={item.friendRequestStatus}/>)
                             }}
                             keyExtractor={item => item.userId}/>

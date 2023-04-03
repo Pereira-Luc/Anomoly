@@ -42,7 +42,6 @@ export function MsgRoom({route}: any) {
             //Set the data to the combined data
             setCombinedData(data.loadChatContent);
         },
-        fetchPolicy: "no-cache"
     });
 
     //Subscribe to the chatRoomSub with chatRoomId
@@ -52,7 +51,7 @@ export function MsgRoom({route}: any) {
             //If the data is not null, add the new message to the combinedData
             if (data.data.data.chatRoomContent !== null) {
                 //Check if I am the sender of the message if so, do not add it to the combinedData
-                if (data.data.data.chatRoomContent.receiver === nameOfUser) {
+                if (data.data.data.chatRoomContent.receiverId === userInfos._id) {
                     return;
                 }
 
@@ -79,7 +78,7 @@ export function MsgRoom({route}: any) {
 
     //Send message to the chatRoom
     const [sendMsg, {loading: loadingSend, error: errorSend, data: dataSend}] = useMutation(SEND_MSG_MUT, {
-        variables: {chatId: chatRoomId, message: encryptedMsg, receiver: nameOfUser},
+        variables: {chatId: chatRoomId, message: encryptedMsg, receiverId: userInfos._id},
     });
 
     const sendMsgToChatRoom = () => {
@@ -88,16 +87,16 @@ export function MsgRoom({route}: any) {
         const encryptedMessage = encrypt(secretKey, msg)
 
         sendMsg({
-            variables: {chatId: chatRoomId, message: encryptedMessage, receiver: nameOfUser}
+            variables: {chatId: chatRoomId, message: encryptedMessage, receiverId: userInfos._id}
         });
 
         //Create a chat message object
         let chatMessage = {
             message: msg,
             messageTime: new Date().toLocaleString(),
-            receiver: nameOfUser,
+            receiverId: userInfos._id,
             // @ts-ignore
-            sender: global.LOGGED_IN_USER
+            senderId: global.LOGGED_IN_USER._id
         }
 
         setCombinedData((combinedData) => [chatMessage, ...combinedData]);
@@ -141,7 +140,7 @@ export function MsgRoom({route}: any) {
                                 decryptedMessage = item.message
                             }
 
-                            if (item.receiver === nameOfUser) {
+                            if (item.receiverId === userInfos._id) {
                                 //This means that the message was sent by me
                                 //only send loading if the message is the last one
                                 if (combinedData[0].message === item.message) {
