@@ -22,8 +22,8 @@ type ChatFeed {
 type ChatMessage {
     message: String
     messageTime: Datetime
-    receiver: String
-    sender: String
+    receiverId: ID
+    senderId: ID
 }
 
 type ChatRoom {
@@ -37,15 +37,18 @@ type FriendRequestStatus {
 }
 
 type Mutation {
-    acceptRequest(friendUsername: String!): String!
-    createChatRoom(user: String!): String!
-    createFriends(friendUsername: String!): String!
-    sendMsg(chatId: ID!, message: String!, receiver: String!): ChatMessage!
+    acceptRequest(friendId: ID!): String!
+    changeProfilePicture(image: String!): Boolean!
+    createFriends(friendId: ID!): String!
+    savePushNotificationToken(token: String!): String!
+    sendMsg(chatId: ID!, message: String!, receiverId: ID!): ChatMessage!
     signUp(confirmPassword: String!, password: String!, publicKey: Base64, username: String!): AuthPayload!
 }
 
 type Query {
+    checkIfPushNotificationIsEnabled: Boolean!
     fetchTest: String!
+    getUserProfilePicture(userId: ID!): String!
     loadAllChatFeed: [ChatFeed]!
     loadChatContent(chatId: ID!): [ChatMessage]!
     loadFriends(status: String!): [User]!
@@ -55,6 +58,7 @@ type Query {
 }
 
 type Subscription {
+    chatFeedContent: ChatFeed!
     chatRoomContent(chatId: ID!): ChatMessage!
 }
 
@@ -63,6 +67,7 @@ type User {
     chatId: ID
     friendRequestStatus: FriendRequestStatus
     password: String
+    profilePic: String
     publicKey: Base64!
     username: String!
 }
