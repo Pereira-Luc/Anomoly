@@ -4,7 +4,7 @@ import styles from "../styles/mainstyle";
 import {pressIn, pressOut} from "../animations/pressAnimation";
 import {fadeInAnimation} from "../animations/fadeAnimation";
 import {ApolloError, useMutation} from "@apollo/client";
-import {SIGNUP_QUERY} from "../constants/graphql/querys/signUpQuery";
+import {SIGNUP_QUERY} from "../constants/graphql/mutations/signUpQuery";
 import * as SecureStore from "expo-secure-store";
 
 import {generateKeyPair} from "../Functions/crypto";

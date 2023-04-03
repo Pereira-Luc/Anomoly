@@ -10,7 +10,7 @@ export const registerForPushNotificationsAsync = async (): Promise<string | null
         return null
     }
 
-    console.log("Registering for push notifications");
+    //console.log("Registering for push notifications");
     //Check if the user has already granted permission for push notifications
     let token;
     const {status: existingStatus} = await Notifications.getPermissionsAsync();
@@ -22,12 +22,12 @@ export const registerForPushNotificationsAsync = async (): Promise<string | null
     }
     // If the user has granted permission for push notifications
     if (finalStatus !== 'granted') {
-        console.log('Failed to get push token for push notification!');
+        //console.log('Failed to get push token for push notification!');
         return null;
     }
     // Get the token for the device
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+    //console.log(token);
     return token;
 }
 

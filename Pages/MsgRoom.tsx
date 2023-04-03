@@ -6,9 +6,9 @@ import {ChatSend} from "../components/ChatSend";
 import {LOAD_CHATROOM_CONTENT} from "../constants/graphql/querys/loadChatRoomQuery";
 import {useMutation, useQuery, useSubscription} from "@apollo/client";
 import {FlatList} from "react-native-gesture-handler";
-import {CHAT_ROOM_SUB} from "../constants/graphql/querys/chatRoomSub";
+import {CHAT_ROOM_SUB} from "../constants/graphql/subscriptions/chatRoomSub";
 import {SetStateAction, useEffect, useState} from "react";
-import {SEND_MSG_MUT} from "../constants/graphql/querys/sendMsgMut";
+import {SEND_MSG_MUT} from "../constants/graphql/mutations/sendMsgMut";
 import {box} from "tweetnacl";
 import {getPrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
 import {decode as decodeBase64} from "@stablelib/base64";
@@ -42,6 +42,7 @@ export function MsgRoom({route}: any) {
             //Set the data to the combined data
             setCombinedData(data.loadChatContent);
         },
+        fetchPolicy: "network-only"
     });
 
     //Subscribe to the chatRoomSub with chatRoomId

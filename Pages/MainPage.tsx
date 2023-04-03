@@ -27,7 +27,7 @@ const MainPage = () => {
     //TODO: Check if server already has my pushNotificationToken, if not, send it to the server
     const [checkPushNotificationToken, {error}] = useLazyQuery(GET_PUSH_NOTIFICATION_TOKEN, {
         onCompleted: async (data) => {
-            console.log(data);
+            //console.log(data);
             //If not asked for permission, data is null
             if (!data.checkIfPushNotificationIsEnabled) {
                 const pushNotificationToken = await registerForPushNotificationsAsync()
@@ -41,13 +41,13 @@ const MainPage = () => {
 
     useEffect(() => {
         const checkPushNotificationTokenAsync = async () => {
-            console.log("checkPushNotificationTokenAsync");
+            //console.log("checkPushNotificationTokenAsync");
             const token = await registerForPushNotificationsAsync()
             if (token) {
                 checkPushNotificationToken();
                 return
             }
-            console.log("No Permission for Push Notifications");
+            // console.log("No Permission for Push Notifications");
         }
 
         checkPushNotificationTokenAsync();

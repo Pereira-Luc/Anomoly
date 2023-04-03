@@ -9,7 +9,7 @@ import * as FileSystem from 'expo-file-system';
 import * as SecureStore from 'expo-secure-store';
 import {useNavigation} from "@react-navigation/native";
 import {useMutation} from "@apollo/client";
-import {SAVE_PROFILE_PIC} from "../constants/graphql/querys/saveProfilePic";
+import {SAVE_PROFILE_PIC} from "../constants/graphql/mutations/saveProfilePic";
 import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
 
 const Settings = () => {
