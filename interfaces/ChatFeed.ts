@@ -3,7 +3,7 @@ import {User} from "./User";
 
 export interface ChatFeed {
     chatId: number
-    chatRoomName: String
+    chatRoomName: string
     lastMessage: ChatMessage
     participants: User[]
 }

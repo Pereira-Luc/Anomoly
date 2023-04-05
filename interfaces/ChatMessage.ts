@@ -1,7 +1,7 @@
 export interface ChatMessage {
     chatId: number
-    message: String
+    message: string
     messageTime: Date
-    sender: String
-    receiver: String
+    sender: string
+    receiver: string
 }
