@@ -131,6 +131,7 @@ export function MsgRoom({route}: any) {
                 <ImageBackground source={require('../assets/img/BackGroundChatRoom7.png')}
                                  style={stylesMsgRoom.background}>
                     <FlatList
+                        initialNumToRender={20}
                         inverted={true}
                         data={combinedData}
                         renderItem={({item}) => {
