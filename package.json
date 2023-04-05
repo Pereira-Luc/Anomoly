@@ -57,7 +57,12 @@
     "tweetnacl-util": "^0.15.1",
     "typescript": "^4.6.3",
     "util": "^0.10.4",
-    "expo-clipboard": "~4.0.1"
+    "expo-clipboard": "~4.0.1",
+    "expo-notifications": "~0.17.0",
+    "expo-permissions": "~14.0.0",
+    "expo-device": "~5.0.0",
+    "expo-task-manager": "~11.0.1",
+    "expo-image-manipulator": "~11.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
