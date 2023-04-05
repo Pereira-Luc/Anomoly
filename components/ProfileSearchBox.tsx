@@ -1,7 +1,7 @@
 import {ActivityIndicator, Image, Text, TouchableOpacity, View} from "react-native";
 import profileSearchBox from "../styles/profileSearchBox";
 import {useMutation} from "@apollo/client";
-import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/querys/addFriendQuery";
+import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/mutations/addFriendQuery";
 import React from "react";
 import {ID} from "graphql-ws/lib/common";
 
