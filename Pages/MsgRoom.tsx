@@ -13,6 +13,8 @@ import {box} from "tweetnacl";
 import {getPrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
 import {decode as decodeBase64} from "@stablelib/base64";
 import {decrypt, encrypt} from "../Functions/crypto";
+import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
+import {base64ToImage} from "../Functions/functions";
 
 export function MsgRoom({route}: any) {
     let navigation = useNavigation();
@@ -20,12 +22,6 @@ export function MsgRoom({route}: any) {
     const nameOfUser = route.params.nameOfUser;
     const chatRoomId = route.params.chatRoomId;
     const userInfos = route.params.userInfo
-    const profileImageUri = route.params.profileImageUri;
-
-    //If there is no profileImageUri, get it from server
-    if (profileImageUri === null) {
-
-    }
 
 
     let [combinedData, setCombinedData] = useState<any[]>([]);
@@ -33,16 +29,31 @@ export function MsgRoom({route}: any) {
     let [msg, setMsg] = useState("");
     let [encryptedMsg, setEncryptedMsg] = useState('');
     let [secretKey, setSecretKey] = useState(new Uint8Array(32));
+    let [profileImageUri, setProfileImageUri] = useState<string>("");
 
 
     //Get chatRoomContent from API with chatRoomId Query= LOAD_CHATROOM_CONTENT
-    const {loading, error} = useQuery(LOAD_CHATROOM_CONTENT, {
+    const {loading: boolean, error} = useQuery(LOAD_CHATROOM_CONTENT, {
         variables: {chatId: chatRoomId},
-        onCompleted: (data) => {
+        onCompleted: (data): void => {
             //Set the data to the combined data
             setCombinedData(data.loadChatContent);
         },
         fetchPolicy: "network-only"
+    });
+
+    //Get the profileImageUri from the server
+    const {loading: loadingProfileImage, error: errorProfileImage} = useQuery(GET_USER_PROFILE_IMG, {
+        variables: {userId: userInfos._id},
+        onCompleted: async (data) => {
+
+            let profilePicB64: string = data.getUserInformation.profilePic;
+            //check if has a profile pic
+            if (profilePicB64) {
+                const imageURI = await base64ToImage(profilePicB64, 500);
+                setProfileImageUri(imageURI);
+            }
+        }
     });
 
     //Subscribe to the chatRoomSub with chatRoomId
@@ -55,7 +66,6 @@ export function MsgRoom({route}: any) {
                 if (data.data.data.chatRoomContent.receiverId === userInfos._id) {
                     return;
                 }
-
                 setCombinedData((combinedData) => [data.data.data.chatRoomContent, ...combinedData]);
             }
         }
