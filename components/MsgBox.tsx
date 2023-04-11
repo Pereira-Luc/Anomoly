@@ -2,8 +2,10 @@ import {Image, Text, TouchableOpacity, View} from "react-native";
 import stylesMsgBox from "../styles/stylesMsgBox";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {useNavigation} from "@react-navigation/native";
-import {manipulateAsync, SaveFormat} from "expo-image-manipulator";
-import {useEffect, useState} from "react";
+import {useState} from "react";
+import {base64ToImage} from "../Functions/functions";
+import {useQuery} from "@apollo/client";
+import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
 //https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/swipeable/
 
 // Maybe interesting for later: https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/drawer-layout
@@ -24,6 +26,7 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | a
             </TouchableOpacity>)
     };
 
+
     const openChat = (): void => {
         console.log("Open chat");
         //Navigate to MsgRoom
@@ -34,29 +37,22 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | a
             userInfo: userInfo,
             profileImageUri: profilePic
         });
-
-        //get UserInfos
     }
 
-    async function base64ToImage(base64String: string, width: number) {
-        const {uri} = await manipulateAsync(
-            `data:image/jpeg;base64,${base64String}`,
-            [{resize: {width}}],
-            {format: SaveFormat.JPEG, compress: 1}
-        );
 
-        return uri;
-    }
+    //Get the profileImageUri from the server
+    const {loading: loadingProfileImage, error: errorProfileImage} = useQuery(GET_USER_PROFILE_IMG, {
+        variables: {userId: userInfo._id},
+        onCompleted: async (data) => {
 
-    useEffect(() => {
-        console.log("Get profile pic of user with id: " + userInfo.username + " should be nameOfUser " + nameOfUser);
-
-        base64ToImage(userInfo.profilePic, 500).then((uri) => {
-            setProfilePic(uri);
-        }).catch((e) => {
-            setProfilePic(require("../assets/icons/profile.png"));
-        });
-    }, []);
+            let profilePicB64: string = data.getUserInformation.profilePic;
+            //check if has a profile pic
+            if (profilePicB64) {
+                const imageURI = await base64ToImage(profilePicB64, 500);
+                setProfilePic(imageURI);
+            }
+        }
+    });
 
     return (
         <Swipeable
