@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import {Subscription} from "expo-modules-core";
+import {NotificationChatData} from "../interfaces/NotificationChatData";
 
 const NotificationHandler = () => {
     const navigation = useNavigation();
@@ -17,11 +18,25 @@ const NotificationHandler = () => {
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(async (response) => {
             // Get data from notification and navigate to the correct screen
-            const {data} = response.notification.request.content;
-            const userInfo = data.userInfo;
-            const nameOfUser = data.nameOfUser;
-            const profileImageUri = data.profileImageUri;
-            const chatRoomId = data.chatRoomId;
+            const {data} = response.notification.request.content.data;
+
+            let notificationChatData: NotificationChatData | null = null;
+            //convert data into NotificationChatData
+
+            console.log('Notification received: ', typeof data);
+
+            notificationChatData = data as NotificationChatData;
+
+            if (!notificationChatData) {
+                return
+            }
+
+            const userInfo = notificationChatData.userInfo;
+            const nameOfUser = notificationChatData.nameOfUser;
+            const profileImageUri = userInfo.profilePicture;
+            const chatRoomId = notificationChatData.chatRoomId;
+
+            console.log('Notification received: ', data);
 
             // Navigate to MsgRoom.tsx
             // @ts-ignore
