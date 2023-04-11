@@ -12,58 +12,58 @@ import {box} from "tweetnacl";
 import {CHAT_FEED_SUB} from "../constants/graphql/subscriptions/chatFeed";
 import {getTimeFormat} from "../Functions/functions";
 import {useIsFocused} from "@react-navigation/native";
+import {ChatFeed} from "../interfaces/ChatFeed";
 
 const Chats = () => {
 
     const [visible, setVisible] = useState(false);
-    const [chatFeed, setChatFeed] = useState<any[]>([]);
+    const [chatFeed, setChatFeed] = useState<ChatFeed[]>([]);
+
+    const getSortedChatFeed = (chatFeed: ChatFeed[]) => {
+        return [...[...chatFeed].sort(
+            (a, b) =>
+                new Date(b.lastMessage.messageTime).getTime() -
+                new Date(a.lastMessage.messageTime).getTime()
+        )];
+    };
 
 
     //Get Chat Feed from API CHAT_FEED_QUERY
-    let {loading, error, data} = useQuery(CHAT_FEED_QUERY, {
+    let {loading, error} = useQuery(CHAT_FEED_QUERY, {
         // Check if the data changed every 500ms
-        //pollInterval: 2000,
-        fetchPolicy: "network-only",
         onCompleted: (data) => {
-            //console.log("Query Data: ", data.loadAllChatFeed)
-            setChatFeed(data.loadAllChatFeed)
-        }
+            console.log("Query Data: ", data.loadAllChatFeed)
+            setChatFeed(data.loadAllChatFeed);
+        },
+        fetchPolicy: "network-only"
     });
 
     //Subscribe to new messages
     const {error: subError, data: subData} = useSubscription(CHAT_FEED_SUB, {
         onData: (subscriptionData) => {
-            //console.log("Subscription Data: ", subscriptionData.data.data.chatFeedContent)
 
-            //Find the chatRoomId in the chatFeed and update the lastMessage
+
             let chatFeedCopy = [...chatFeed];
             let chatId = subscriptionData.data.data.chatFeedContent.chatId;
             let lastMessage = subscriptionData.data.data.chatFeedContent.lastMessage;
             let lastMessageTime = subscriptionData.data.data.chatFeedContent.lastMessage.messageTime;
-            let participant = subscriptionData.data.data.chatFeedContent.participants;
 
-
-            console.log("ChatId: ", chatId)
-            console.log("LastMessage: ", lastMessage)
-            console.log("LastMessageTime: ", lastMessageTime)
-            console.log("Participant: ", participant)
-
-            //Find the chatRoomId in the chatFeed and update the lastMessage
-            let chatRoomIndex = chatFeedCopy.findIndex((chatRoom) => chatRoom.chatId === chatId);
-
-            console.log("ChatRoomIndex: ", chatRoomIndex)
+            // Find the chatRoomId in the chatFeed and update the lastMessage
+            let chatRoomIndex = chatFeedCopy.findIndex(
+                (chatRoom) => chatRoom.chatId === chatId
+            );
 
             if (chatRoomIndex === -1) {
-                return
+                return;
             }
 
             let chatFeedElement = chatFeedCopy[chatRoomIndex];
 
             chatFeedElement.lastMessage = lastMessage;
             chatFeedElement.lastMessage.messageTime = lastMessageTime;
-            // order the chatFeed by lastMessageTime
-            setChatFeed([])
-            setChatFeed(chatFeedCopy)
+
+            // Order the chatFeed by lastMessageTime
+            setChatFeed(getSortedChatFeed(chatFeedCopy));
         }
     });
 
@@ -99,10 +99,9 @@ const Chats = () => {
                 </View>
             </View>
             <FlatList
-                extraData={chatFeed.sort((a, b) => new Date(b.lastMessage.messageTime).getTime() - new Date(a.lastMessage.messageTime).getTime())}
                 initialNumToRender={10}
                 maxToRenderPerBatch={10}
-                data={chatFeed.sort((a, b) => new Date(b.lastMessage.messageTime).getTime() - new Date(a.lastMessage.messageTime).getTime())}
+                data={chatFeed}
                 renderItem={({item}) => {
 
                     const publicKey: Uint8Array = decodeBase64(item.participants[0].publicKey)
@@ -115,9 +114,9 @@ const Chats = () => {
                     // @ts-ignore
                     const privateKey: Uint8Array = decodeBase64(global.LOGGED_IN_USER.privateKey)
 
-                    const secretSharedKey = box.before(publicKey, privateKey);
+                    const secretSharedKey: Uint8Array = box.before(publicKey, privateKey);
 
-                    let decryptedMessage = "";
+                    let decryptedMessage: string = "";
                     try {
                         decryptedMessage = decrypt(secretSharedKey, item.lastMessage.message)
                     } catch (e) {
