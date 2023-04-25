@@ -45,7 +45,7 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | a
         variables: {userId: userInfo._id},
         onCompleted: async (data) => {
 
-            let profilePicB64: string = data.getUserInformation.profilePic;
+            let profilePicB64: string = data.getUserProfilePic;
             //check if has a profile pic
             if (profilePicB64) {
                 const imageURI = await base64ToImage(profilePicB64, 500);
