@@ -18,8 +18,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
         "NSPhotoLibraryAddUsageDescription": "This app needs permission to save photos to your library",
         "NSPhotoLibraryUsageDescription": "This app needs permission to access your photo library"
       },
