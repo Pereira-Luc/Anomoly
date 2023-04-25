@@ -11,14 +11,15 @@ import {decrypt} from "../Functions/crypto";
 import {box} from "tweetnacl";
 import {CHAT_FEED_SUB} from "../constants/graphql/subscriptions/chatFeed";
 import {getTimeFormat} from "../Functions/functions";
-import {useIsFocused} from "@react-navigation/native";
+import {useIsFocused, useNavigation} from "@react-navigation/native";
 import {ChatFeed} from "../interfaces/ChatFeed";
+import {logout} from "../Functions/logout";
 
 const Chats = () => {
 
     const [visible, setVisible] = useState(false);
     const [chatFeed, setChatFeed] = useState<ChatFeed[]>([]);
-
+    let navigation = useNavigation();
     const getSortedChatFeed = (chatFeed: ChatFeed[]) => {
         return [...[...chatFeed].sort(
             (a, b) =>
@@ -27,6 +28,13 @@ const Chats = () => {
         )];
     };
 
+    // @ts-ignore
+    // Check if the users private key is set
+    if (global.LOGGED_IN_USER.privateKey == null) {
+        console.log("Missing Private Key")
+        logout(navigation);
+        return null
+    }
 
     //Get Chat Feed from API CHAT_FEED_QUERY
     let {loading, error} = useQuery(CHAT_FEED_QUERY, {
@@ -38,10 +46,19 @@ const Chats = () => {
         fetchPolicy: "network-only"
     });
 
+    if (error) {
+        //if error is AuthError, logout
+        if (error.message === "You are not authenticated") {
+            console.log("AuthError")
+            //logout(navigation);
+        }
+    }
+
     //Subscribe to new messages
     const {error: subError, data: subData} = useSubscription(CHAT_FEED_SUB, {
         onData: (subscriptionData) => {
-
+            // @ts-ignore
+            console.log("Subscription Data ", subscriptionData.data.data.chatFeedContent, " Phone:", global.LOGGED_IN_USER.username)
 
             let chatFeedCopy = [...chatFeed];
             let chatId = subscriptionData.data.data.chatFeedContent.chatId;
@@ -54,6 +71,10 @@ const Chats = () => {
             );
 
             if (chatRoomIndex === -1) {
+                console.log("ChatRoom not found add it to the chatFeed")
+                // ChatRoom not found add it to the chatFeed
+                chatFeedCopy.push(subscriptionData.data.data.chatFeedContent);
+                setChatFeed(getSortedChatFeed(chatFeedCopy));
                 return;
             }
 
@@ -61,6 +82,8 @@ const Chats = () => {
 
             chatFeedElement.lastMessage = lastMessage;
             chatFeedElement.lastMessage.messageTime = lastMessageTime;
+
+            console.log("load chat")
 
             // Order the chatFeed by lastMessageTime
             setChatFeed(getSortedChatFeed(chatFeedCopy));
@@ -105,22 +128,15 @@ const Chats = () => {
                 renderItem={({item}) => {
 
                     const publicKey: Uint8Array = decodeBase64(item.participants[0].publicKey)
-                    //Check if private key is null
-                    // @ts-ignore
-                    if (global.LOGGED_IN_USER.privateKey == null) {
-                        return null
-                    }
 
                     // @ts-ignore
                     const privateKey: Uint8Array = decodeBase64(global.LOGGED_IN_USER.privateKey)
-
                     const secretSharedKey: Uint8Array = box.before(publicKey, privateKey);
-
                     let decryptedMessage: string = "";
+
                     try {
                         decryptedMessage = decrypt(secretSharedKey, item.lastMessage.message)
                     } catch (e) {
-                        console.log("Error decrypting message: ", e)
                         decryptedMessage = item.lastMessage.message
                     }
 
