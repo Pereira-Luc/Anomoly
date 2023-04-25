@@ -1,15 +1,17 @@
 import {ActivityIndicator, Image, Text, TouchableOpacity, View} from "react-native";
 import profileSearchBox from "../styles/profileSearchBox";
-import {useMutation} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/mutations/addFriendQuery";
 import React from "react";
 import {ID} from "graphql-ws/lib/common";
+import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
+import {base64ToImage} from "../Functions/functions";
 
 
 const ProfileSearchBox = ({username, friendRequestStatus, userId}: any) => {
 
     let [submitFriendRequest, {loading, error, data}] = useMutation(ADD_FRIEND_QUERY);
-
+    let [profilePic, setProfilePic] = React.useState(require("../assets/icons/profile.png"));
     //@ts-ignore
     const myId = global.LOGGED_IN_USER._id
 
@@ -39,10 +41,29 @@ const ProfileSearchBox = ({username, friendRequestStatus, userId}: any) => {
         }
     }
 
+    //Get the profileImageUri from the server
+    const {loading: loadingProfileImage, error: errorProfileImage} = useQuery(GET_USER_PROFILE_IMG, {
+        variables: {userId: userId},
+        onCompleted: async (data) => {
+            console.log("Load profile pic from server");
+            let profilePicB64: string = data.getUserProfilePic;
+            //check if has a profile pic
+            if (profilePicB64) {
+                console.log("Has profile pic");
+                const imageURI = await base64ToImage(profilePicB64, 500);
+                setProfilePic({uri: imageURI});
+            }
+        }
+    });
+
+
+    console.log(errorProfileImage)
+
+
     return (
         <View style={profileSearchBox.container}>
             <View style={profileSearchBox.pfPic}>
-                <Image style={profileSearchBox.pfPicImg} source={require("../assets/icons/profile.png")}/>
+                <Image style={profileSearchBox.pfPicImg} source={profilePic}/>
             </View>
             <View style={profileSearchBox.pfNameContainer}>
                 <Text style={profileSearchBox.pfName}>{username}</Text>
