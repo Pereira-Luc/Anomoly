@@ -24,7 +24,7 @@ const MainPage = () => {
 
     //TODO: Add a useEffect to check if the user is logged in, if not, redirect to the start page
 
-    //TODO: Check if server already has my pushNotificationToken, if not, send it to the server
+    //Check if server already has my pushNotificationToken, if not, send it to the server
     const [checkPushNotificationToken, {error}] = useLazyQuery(GET_PUSH_NOTIFICATION_TOKEN, {
         onCompleted: async (data) => {
             //console.log(data);
@@ -62,11 +62,12 @@ const MainPage = () => {
                     {page === "Groups" ? <Groups/> : null}
                     {page === "Settings" ? <Settings/> : null}
                     <View style={styles.footer}>
-                        <TouchableOpacity style={[styles.footerButton]}
-                                          onPress={() => setPage("Groups")}>
+                        {page === "This is disabled" ? <TouchableOpacity style={[styles.footerButton]}
+                                                                         onPress={() => setPage("Groups")}>
                             <Image source={require('../assets/icons/group1.png')}
-                                   style={[styles.footerImg, page === "Groups" && styles.footerImgActive]}></Image>
-                        </TouchableOpacity>
+                                   style={[styles.footerImg, styles.footerImgActive]}></Image>
+                        </TouchableOpacity> : null
+                        }
                         <TouchableOpacity style={[styles.chatsButtonFooter, styles.footerButton]}
                                           onPress={() => setPage("Chats")}>
                             <Image source={require('../assets/icons/chat1.png')}

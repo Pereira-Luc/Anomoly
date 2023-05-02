@@ -48,7 +48,6 @@ export function MsgRoom({route}: any) {
         onCompleted: async (data) => {
 
             let profilePicB64: string = data.getUserProfilePic
-            console.log("ProfilePicB64: " + profilePicB64);
             //check if has a profile pic
             if (profilePicB64) {
                 const imageURI = await base64ToImage(profilePicB64, 500);
