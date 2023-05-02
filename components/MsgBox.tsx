@@ -10,19 +10,16 @@ import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
 
 // Maybe interesting for later: https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/drawer-layout
 
-export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | any) {
+export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo, onDelete}: String | any) {
     let navigation = useNavigation();
 
     const [profilePic, setProfilePic] = useState<string>('');
 
-    const onDelete = () => {
-        console.log("Delete");
-    }
 
     const renderRightView = (): JSX.Element => {
         return (
             <TouchableOpacity onPress={onDelete} style={stylesMsgBox.deleteButtonContainer}>
-                <Text style={stylesMsgBox.deleteButtonText}>Delete</Text>
+                <Text style={stylesMsgBox.deleteButtonText}>Unfriend</Text>
             </TouchableOpacity>)
     };
 
@@ -56,7 +53,7 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo}: String | a
 
     return (
         <Swipeable
-            friction={2}
+            friction={3}
             renderRightActions={() =>
                 renderRightView()
             }>

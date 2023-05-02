@@ -4,7 +4,7 @@ import {MsgBox} from "./MsgBox";
 import ChatsSearchPopPage from "./ChatsSearchPopPage";
 import React, {useState} from "react";
 import {CHAT_FEED_QUERY} from "../constants/graphql/querys/chatFeedQuery";
-import {useQuery, useSubscription} from "@apollo/client";
+import {useMutation, useQuery, useSubscription} from "@apollo/client";
 import {FlatList} from "react-native-gesture-handler";
 import {decode as decodeBase64} from "@stablelib/base64";
 import {decrypt} from "../Functions/crypto";
@@ -14,12 +14,32 @@ import {getTimeFormat} from "../Functions/functions";
 import {useIsFocused, useNavigation} from "@react-navigation/native";
 import {ChatFeed} from "../interfaces/ChatFeed";
 import {logout} from "../Functions/logout";
+import {UNFRIEND} from "../constants/graphql/mutations/unFriend";
 
 const Chats = () => {
 
     const [visible, setVisible] = useState(false);
     const [chatFeed, setChatFeed] = useState<ChatFeed[]>([]);
+
     let navigation = useNavigation();
+
+    // GraphQL Mutation to unfriend a user
+    const [unfriend] = useMutation(UNFRIEND, {
+        onCompleted: (data) => {
+            console.log("Unfriend Mutation: ", data);
+        }
+    });
+
+
+    const onDelete = (chatId: number, friendId: number) => {
+        console.log('Delete chat:', chatId);
+        setChatFeed(chatFeed.filter((chat) => chat.chatId !== chatId));
+
+        //Unfriend the user
+        unfriend({variables: {userId: friendId}});
+    };
+
+
     const getSortedChatFeed = (chatFeed: ChatFeed[]) => {
         return [...[...chatFeed].sort(
             (a, b) =>
@@ -45,6 +65,8 @@ const Chats = () => {
         },
         fetchPolicy: "network-only"
     });
+
+    // TODO: Check if the user is authenticated
 
     if (error) {
         //if error is AuthError, logout
@@ -140,7 +162,8 @@ const Chats = () => {
                         decryptedMessage = item.lastMessage.message
                     }
 
-                    return <MsgBox lastMsg={decryptedMessage} nameOfUser={item.chatRoomName}
+                    return <MsgBox onDelete={() => onDelete(item.chatId, item.participants[0]._id)}
+                                   lastMsg={decryptedMessage} nameOfUser={item.chatRoomName}
                                    date={"- " + getTimeFormat(item.lastMessage.messageTime)} chatId={item.chatId}
                                    userInfo={item.participants[0]}/>
                 }}
