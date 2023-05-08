@@ -4,7 +4,7 @@
     "slug": "Anomoly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/img/Anomoly.png",
+    "icon": "assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/img/Anomoly.png",
@@ -26,7 +26,8 @@
         "NSPhotoLibraryAddUsageDescription": "This app needs permission to save photos to your library",
         "NSPhotoLibraryUsageDescription": "This app needs permission to access your photo library"
       },
-      "userInterfaceStyle": "dark"
+      "userInterfaceStyle": "dark",
+      "bundleIdentifier": "com.zerixplay.anomoly"
     },
     "android": {
       "permissions": [
@@ -38,10 +39,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "userInterfaceStyle": "dark"
+      "userInterfaceStyle": "dark",
+      "package": "com.zerixplay.anomoly"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "extra": {
+      "eas": {
+        "projectId": "5d24e3f3-dc37-44b4-ba84-c1519da306e4"
+      }
     }
   }
 }
