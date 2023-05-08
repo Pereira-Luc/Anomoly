@@ -12,7 +12,6 @@ First of all clone the repository using the following command:
 
 ```bash
 git clone https://github.com/Pereira-Luc/Anomoly
-
 ```
 
 Then install the dependencies using the following command:
