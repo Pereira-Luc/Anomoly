@@ -10,6 +10,9 @@ import {Host} from "react-native-portalize";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {registerForPushNotificationsAsync} from "../Functions/sendPusNotification";
 import {GET_PUSH_NOTIFICATION_TOKEN, SAVE_PUSH_NOTIFICATION_TOKEN} from "../constants/graphql/querys/pushNotification";
+import {CHECK_IF_LOGGED_IN} from "../constants/graphql/querys/isAuth";
+import {logout} from "../Functions/logout";
+import {useNavigation} from "@react-navigation/native";
 
 const MainPage = () => {
     //Default page is Chats
@@ -23,9 +26,17 @@ const MainPage = () => {
     });
 
     //TODO: Add a useEffect to check if the user is logged in, if not, redirect to the start page
+    const [checkIfLoggedIn, {data, error}] = useLazyQuery(CHECK_IF_LOGGED_IN, {});
+
+    if (error) {
+        console.log(error.message);
+        if (error.message === "You are not authenticated") {
+            logout(useNavigation());
+        }
+    }
 
     //Check if server already has my pushNotificationToken, if not, send it to the server
-    const [checkPushNotificationToken, {error}] = useLazyQuery(GET_PUSH_NOTIFICATION_TOKEN, {
+    const [checkPushNotificationToken, {}] = useLazyQuery(GET_PUSH_NOTIFICATION_TOKEN, {
         onCompleted: async (data) => {
             //console.log(data);
             //If not asked for permission, data is null
@@ -40,6 +51,7 @@ const MainPage = () => {
     });
 
     useEffect(() => {
+        checkIfLoggedIn();
         const checkPushNotificationTokenAsync = async () => {
             //console.log("checkPushNotificationTokenAsync");
             const token = await registerForPushNotificationsAsync()
