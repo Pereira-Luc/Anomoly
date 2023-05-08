@@ -1,4 +1,12 @@
-import {Image, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {
+    Image,
+    NativeSyntheticEvent,
+    Text,
+    TextInput,
+    TextInputTextInputEventData,
+    TouchableOpacity,
+    View
+} from "react-native";
 import styles from "../styles/mainstyle";
 import {MsgBox} from "./MsgBox";
 import ChatsSearchPopPage from "./ChatsSearchPopPage";
@@ -15,10 +23,12 @@ import {useIsFocused, useNavigation} from "@react-navigation/native";
 import {ChatFeed} from "../interfaces/ChatFeed";
 import {logout} from "../Functions/logout";
 import {UNFRIEND} from "../constants/graphql/mutations/unFriend";
+import {searchInChatFeed} from "../Functions/searchInChatFeed";
 
 const Chats = () => {
 
     const [visible, setVisible] = useState(false);
+    const [fullChatFeed, setFullChatFeed] = useState<ChatFeed[]>([]);
     const [chatFeed, setChatFeed] = useState<ChatFeed[]>([]);
 
     let navigation = useNavigation();
@@ -37,6 +47,13 @@ const Chats = () => {
 
         //Unfriend the user
         unfriend({variables: {userId: friendId}});
+    };
+
+    const search = async (text: NativeSyntheticEvent<TextInputTextInputEventData>) => {
+        const input = text.nativeEvent.text;
+
+        let searchResult = await searchInChatFeed(input, fullChatFeed);
+        setChatFeed(searchResult)
     };
 
 
@@ -62,17 +79,16 @@ const Chats = () => {
         onCompleted: (data) => {
             console.log("Query Data: ", data.loadAllChatFeed)
             setChatFeed(data.loadAllChatFeed);
+            setFullChatFeed(data.loadAllChatFeed);
         },
         fetchPolicy: "network-only"
     });
-
-    // TODO: Check if the user is authenticated
 
     if (error) {
         //if error is AuthError, logout
         if (error.message === "You are not authenticated") {
             console.log("AuthError")
-            //logout(navigation);
+            logout(navigation);
         }
     }
 
@@ -97,6 +113,7 @@ const Chats = () => {
                 // ChatRoom not found add it to the chatFeed
                 chatFeedCopy.push(subscriptionData.data.data.chatFeedContent);
                 setChatFeed(getSortedChatFeed(chatFeedCopy));
+                setFullChatFeed(getSortedChatFeed(chatFeedCopy));
                 return;
             }
 
@@ -109,8 +126,10 @@ const Chats = () => {
 
             // Order the chatFeed by lastMessageTime
             setChatFeed(getSortedChatFeed(chatFeedCopy));
+            setFullChatFeed(getSortedChatFeed(chatFeedCopy));
         }
     });
+
 
     if (subError) console.log("Subscription Error: ", subError)
 
@@ -140,7 +159,7 @@ const Chats = () => {
                 </View>
                 <View style={styles.searchBox}>
                     <TextInput placeholderTextColor={"#a8a8a8"} placeholder="Search"
-                               style={styles.searchInput}></TextInput>
+                               style={styles.searchInput} onTextInput={(input) => search(input)}></TextInput>
                 </View>
             </View>
             <FlatList
