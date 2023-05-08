@@ -38,6 +38,9 @@ export const MissingPrivateKeyPopUp = ({data, setPrivateKey}: any) => {
                 let data2 = JSON.stringify(data);
                 await SecureStore.setItemAsync('authPayload', data2)
 
+                //add private key to global variable LOGGED_IN_USER
+                data.user.privateKey = encodeBase64(secretKey);
+
                 //@ts-ignore
                 global.LOGGED_IN_USER = data.user
 

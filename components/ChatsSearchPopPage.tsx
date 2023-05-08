@@ -14,12 +14,14 @@ import {colors} from "../styles/colors/colors";
 import {useQuery} from "@apollo/client";
 import {SEARCH_QUERY} from "../constants/graphql/querys/searchUser";
 import ProfileSearchBox from "./ProfileSearchBox";
+import {GET_ALL_FRIEND_REQUESTS} from "../constants/graphql/querys/getFriendRequests";
 
 const ChatSearchPopPage = ({visible, setVisible}: any) => {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['90%', '90%'], []);
 
     let [searchText, setSearchText] = React.useState("");
+    let [dataToShow, setDataToShow] = React.useState<any>([]);
 
     //Get Search Results from API SEARCH_QUERY
     let {error, data} = useQuery(SEARCH_QUERY, {
@@ -27,12 +29,29 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
             {
                 v: searchText
             },
+        fetchPolicy: 'no-cache',
+        onCompleted: (data) => {
+            setDataToShow(data.searchUser)
+        }
+    });
+
+    //load all the active friend requests
+    let {error: friendRequestError, data: friendRequestData} = useQuery(GET_ALL_FRIEND_REQUESTS, {
         fetchPolicy: 'network-only',
+        onCompleted: (data) => {
+            console.log("Friend Requests: ", data.getFriendRequests)
+            setDataToShow(data.getFriendRequests)
+        }
     });
 
 
+    if (friendRequestError) console.log(friendRequestError.message);
     if (error) console.log(error.message);
+
+
     return (
+
+
         <Portal>
             <BottomSheet
                 ref={bottomSheetRef}
@@ -63,10 +82,10 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
                         </View>
                         <View style={chatSearchPop.spacerLine}></View>
                         <FlatList
-                            data={data && data.searchUser}
+                            data={dataToShow}
                             renderItem={({item, index}) => {
-                                //console.log("Iteams: " , item.userId);
-                                return (<ProfileSearchBox username={item.username}
+                                console.log("Item: ", item)
+                                return (<ProfileSearchBox key={item} userId={item._id} username={item.username}
                                                           friendRequestStatus={item.friendRequestStatus}/>)
                             }}
                             keyExtractor={item => item.userId}/>

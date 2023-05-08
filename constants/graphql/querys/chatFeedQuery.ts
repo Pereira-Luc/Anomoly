@@ -12,9 +12,9 @@ export const CHAT_FEED_QUERY = gql`
             }
             lastMessage {
                 message
-                sender
+                senderId
                 messageTime
-                receiver
+                receiverId
             }
         }
     }

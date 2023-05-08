@@ -4,7 +4,7 @@ import {box, randomBytes, setPRNG} from 'tweetnacl';
 //Source: https://github.com/dchest/tweetnacl-js/wiki/Examples
 //Just added some more functions and changed the decode and encode functions with stablelib
 //which is compatible with expo React Native
-import * as Random from 'expo-random';
+import {getRandomBytes} from 'expo-crypto';
 
 import {decode as decodeUTF8, encode as encodeUTF8} from "@stablelib/utf8";
 import {decode as decodeBase64, encode as encodeBase64} from "@stablelib/base64";
@@ -13,7 +13,7 @@ import {decode as decodeBase64, encode as encodeBase64} from "@stablelib/base64"
 //Very important to set the PRNG to a secure random number generator that has a good entropy
 setPRNG((x, n) => {
     // copy n random bytes into x
-    const randomBytes: Uint8Array = Random.getRandomBytes(n);
+    const randomBytes: Uint8Array = getRandomBytes(n);
     for (let i = 0; i < n; i++) {
         x[i] = randomBytes[i]
     }

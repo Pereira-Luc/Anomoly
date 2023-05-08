@@ -42,14 +42,14 @@ export default StyleSheet.create({
     },
     heading1: {
         position: 'absolute',
-        fontSize: (Platform.OS === 'ios') ? 95 : 85,
+        fontSize: Dimensions.get('window').width * 0.20,
         fontFamily: 'LogoFont',
         color: '#ffffff',
         top: (Platform.OS === 'ios') ? 220 : 150,
     },
     text: {
         color: '#ffffff',
-        fontSize: (Platform.OS === 'ios') ? 20 : 16,
+        fontSize: Dimensions.get('window').width * 0.05,
     },
     smallText: {
         textAlign: 'center',

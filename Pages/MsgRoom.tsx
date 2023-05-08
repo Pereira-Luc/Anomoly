@@ -6,13 +6,15 @@ import {ChatSend} from "../components/ChatSend";
 import {LOAD_CHATROOM_CONTENT} from "../constants/graphql/querys/loadChatRoomQuery";
 import {useMutation, useQuery, useSubscription} from "@apollo/client";
 import {FlatList} from "react-native-gesture-handler";
-import {CHAT_ROOM_SUB} from "../constants/graphql/querys/chatRoomSub";
+import {CHAT_ROOM_SUB} from "../constants/graphql/subscriptions/chatRoomSub";
 import {SetStateAction, useEffect, useState} from "react";
-import {SEND_MSG_MUT} from "../constants/graphql/querys/sendMsgMut";
+import {SEND_MSG_MUT} from "../constants/graphql/mutations/sendMsgMut";
 import {box} from "tweetnacl";
 import {getPrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
 import {decode as decodeBase64} from "@stablelib/base64";
 import {decrypt, encrypt} from "../Functions/crypto";
+import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
+import {base64ToImage} from "../Functions/functions";
 
 export function MsgRoom({route}: any) {
     let navigation = useNavigation();
@@ -27,16 +29,31 @@ export function MsgRoom({route}: any) {
     let [msg, setMsg] = useState("");
     let [encryptedMsg, setEncryptedMsg] = useState('');
     let [secretKey, setSecretKey] = useState(new Uint8Array(32));
+    let [profileImageUri, setProfileImageUri] = useState<string>("");
 
 
     //Get chatRoomContent from API with chatRoomId Query= LOAD_CHATROOM_CONTENT
-    const {loading, error} = useQuery(LOAD_CHATROOM_CONTENT, {
+    const {loading: boolean, error} = useQuery(LOAD_CHATROOM_CONTENT, {
         variables: {chatId: chatRoomId},
-        onCompleted: (data) => {
+        onCompleted: (data): void => {
             //Set the data to the combined data
             setCombinedData(data.loadChatContent);
         },
-        fetchPolicy: "no-cache"
+        fetchPolicy: "network-only"
+    });
+
+    //Get the profileImageUri from the server
+    const {loading: loadingProfileImage, error: errorProfileImage} = useQuery(GET_USER_PROFILE_IMG, {
+        variables: {userId: userInfos._id},
+        onCompleted: async (data) => {
+
+            let profilePicB64: string = data.getUserProfilePic
+            //check if has a profile pic
+            if (profilePicB64) {
+                const imageURI = await base64ToImage(profilePicB64, 500);
+                setProfileImageUri(imageURI);
+            }
+        }
     });
 
     //Subscribe to the chatRoomSub with chatRoomId
@@ -46,10 +63,9 @@ export function MsgRoom({route}: any) {
             //If the data is not null, add the new message to the combinedData
             if (data.data.data.chatRoomContent !== null) {
                 //Check if I am the sender of the message if so, do not add it to the combinedData
-                if (data.data.data.chatRoomContent.receiver === nameOfUser) {
+                if (data.data.data.chatRoomContent.receiverId === userInfos._id) {
                     return;
                 }
-
                 setCombinedData((combinedData) => [data.data.data.chatRoomContent, ...combinedData]);
             }
         }
@@ -73,7 +89,7 @@ export function MsgRoom({route}: any) {
 
     //Send message to the chatRoom
     const [sendMsg, {loading: loadingSend, error: errorSend, data: dataSend}] = useMutation(SEND_MSG_MUT, {
-        variables: {chatId: chatRoomId, message: encryptedMsg, receiver: nameOfUser},
+        variables: {chatId: chatRoomId, message: encryptedMsg, receiverId: userInfos._id},
     });
 
     const sendMsgToChatRoom = () => {
@@ -82,16 +98,16 @@ export function MsgRoom({route}: any) {
         const encryptedMessage = encrypt(secretKey, msg)
 
         sendMsg({
-            variables: {chatId: chatRoomId, message: encryptedMessage, receiver: nameOfUser}
+            variables: {chatId: chatRoomId, message: encryptedMessage, receiverId: userInfos._id}
         });
 
         //Create a chat message object
         let chatMessage = {
             message: msg,
             messageTime: new Date().toLocaleString(),
-            receiver: nameOfUser,
+            receiverId: userInfos._id,
             // @ts-ignore
-            sender: global.LOGGED_IN_USER
+            senderId: global.LOGGED_IN_USER._id
         }
 
         setCombinedData((combinedData) => [chatMessage, ...combinedData]);
@@ -125,6 +141,7 @@ export function MsgRoom({route}: any) {
                 <ImageBackground source={require('../assets/img/BackGroundChatRoom7.png')}
                                  style={stylesMsgRoom.background}>
                     <FlatList
+                        initialNumToRender={20}
                         inverted={true}
                         data={combinedData}
                         renderItem={({item}) => {
@@ -135,7 +152,7 @@ export function MsgRoom({route}: any) {
                                 decryptedMessage = item.message
                             }
 
-                            if (item.receiver === nameOfUser) {
+                            if (item.receiverId === userInfos._id) {
                                 //This means that the message was sent by me
                                 //only send loading if the message is the last one
                                 if (combinedData[0].message === item.message) {
@@ -179,7 +196,10 @@ export function MsgRoom({route}: any) {
                         </TouchableOpacity>
                         <View style={stylesMsgRoom.nameOfUser}><Text
                             style={stylesMsgRoom.nameOfUserText}>{nameOfUser}</Text></View>
-                        <View style={stylesMsgRoom.bubbleButtonRight}></View>
+                        <View style={stylesMsgRoom.bubbleButtonRight}>
+                            {profileImageUri ?
+                                <Image style={stylesMsgRoom.profileImage} source={{uri: profileImageUri}}/> : null}
+                        </View>
                     </View>
                 </View>
             </View>

@@ -1,14 +1,14 @@
 import {gql} from "@apollo/client";
 
-export const SEARCH_QUERY = gql`
-    query SearchQuery($v: String!) {
-        searchUser(v: $v) {
+export const GET_ALL_FRIEND_REQUESTS = gql`
+    query getAllFriendRequests {
+        getFriendRequests{
             _id
             username
             friendRequestStatus {
-                status
                 needToAcceptBy
+                status
             }
         }
     }
-`;
+`

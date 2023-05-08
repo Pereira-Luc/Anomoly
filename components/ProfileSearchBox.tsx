@@ -1,20 +1,25 @@
 import {ActivityIndicator, Image, Text, TouchableOpacity, View} from "react-native";
 import profileSearchBox from "../styles/profileSearchBox";
-import {useMutation} from "@apollo/client";
-import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/querys/addFriendQuery";
+import {useMutation, useQuery} from "@apollo/client";
+import {ACCEPT_FRIEND_REQUEST_QUERY, ADD_FRIEND_QUERY} from "../constants/graphql/mutations/addFriendQuery";
 import React from "react";
+import {ID} from "graphql-ws/lib/common";
+import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
+import {base64ToImage} from "../Functions/functions";
 
 
-const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
+const ProfileSearchBox = ({username, friendRequestStatus, userId}: any) => {
 
     let [submitFriendRequest, {loading, error, data}] = useMutation(ADD_FRIEND_QUERY);
+    let [profilePic, setProfilePic] = React.useState(require("../assets/icons/profile.png"));
     //@ts-ignore
-    const myUsername = global.LOGGED_IN_USER
+    const myId = global.LOGGED_IN_USER._id
 
-    const addUser = async (username: String) => {
+    const addUser = async (userId: ID) => {
         console.log("Submitting Friend Request");
+
         try {
-            await submitFriendRequest({variables: {friendUsername: username}})
+            await submitFriendRequest({variables: {friendId: userId}})
         } catch (e) {
             console.log(e);
         }
@@ -26,20 +31,39 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
         data: dataAcceptFR
     }] = useMutation(ACCEPT_FRIEND_REQUEST_QUERY);
 
-    const acceptRequest = async (username: String) => {
+    const acceptRequest = async (userId: ID) => {
         console.log("Accepting Friend Request");
 
         try {
-            await acceptFriendRequest({variables: {friendUsername: username}})
+            await acceptFriendRequest({variables: {friendId: userId}})
         } catch (e) {
             console.log(e);
         }
     }
 
+    //Get the profileImageUri from the server
+    const {loading: loadingProfileImage, error: errorProfileImage} = useQuery(GET_USER_PROFILE_IMG, {
+        variables: {userId: userId},
+        onCompleted: async (data) => {
+            console.log("Load profile pic from server");
+            let profilePicB64: string = data.getUserProfilePic;
+            //check if has a profile pic
+            if (profilePicB64) {
+                console.log("Has profile pic");
+                const imageURI = await base64ToImage(profilePicB64, 500);
+                setProfilePic({uri: imageURI});
+            }
+        }
+    });
+
+
+    console.log(errorProfileImage)
+
+
     return (
         <View style={profileSearchBox.container}>
             <View style={profileSearchBox.pfPic}>
-                <Image style={profileSearchBox.pfPicImg} source={require("../assets/icons/profile.png")}/>
+                <Image style={profileSearchBox.pfPicImg} source={profilePic}/>
             </View>
             <View style={profileSearchBox.pfNameContainer}>
                 <Text style={profileSearchBox.pfName}>{username}</Text>
@@ -52,7 +76,7 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
                     {data && <Text style={profileSearchBox.pfAddButtonText}>Added</Text>}
                     {friendRequestStatus.status !== 'Undefined'
                         && friendRequestStatus.status !== 'Accepted'
-                        && friendRequestStatus.needToAcceptBy !== myUsername
+                        && friendRequestStatus.needToAcceptBy !== myId
                         && !data
                         && <Text style={profileSearchBox.pfAddButtonText}>{friendRequestStatus.status}</Text>}
 
@@ -60,13 +84,13 @@ const ProfileSearchBox = ({username, friendRequestStatus}: any) => {
                                                                          source={require("../assets/icons/userAdded.png")}/>}
 
                     {friendRequestStatus.status === 'Undefined' && !data &&
-                        <TouchableOpacity onPress={() => addUser(username)} style={profileSearchBox.pfAddButtonB}>
+                        <TouchableOpacity onPress={() => addUser(userId)} style={profileSearchBox.pfAddButtonB}>
                             <Image style={profileSearchBox.pfAddButtonImg}
                                    source={require("../assets/icons/addUser.png")}/>
                         </TouchableOpacity>}
 
-                    {!dataAcceptFR && friendRequestStatus.needToAcceptBy === myUsername && !data &&
-                        <TouchableOpacity onPress={() => acceptRequest(username)}
+                    {!dataAcceptFR && friendRequestStatus.needToAcceptBy === myId && !data &&
+                        <TouchableOpacity onPress={() => acceptRequest(userId)}
                                           style={profileSearchBox.pfAddButtonB}>
                             <Text style={profileSearchBox.pfAddButtonText}>ACCEPT</Text>
                         </TouchableOpacity>}

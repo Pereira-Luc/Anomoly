@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 
 export const storePrivateKeyPerUser = async (userId: string, privateKey: string): Promise<boolean> => {
     return Promise.resolve(
-        SecureStore.setItemAsync(userId, privateKey).then(() => {
+        SecureStore.setItemAsync(userId + "_privateKey", privateKey).then(() => {
             console.log("Private key stored successfully");
             return true;
         }).catch((error) => {
@@ -16,7 +16,7 @@ export const storePrivateKeyPerUser = async (userId: string, privateKey: string)
 //This function gets the private key for a user in the secure storage of the device
 export const getPrivateKeyPerUser = async (userId: string): Promise<string | null> => {
     return Promise.resolve(
-        SecureStore.getItemAsync(userId).then((privateKey) => {
+        SecureStore.getItemAsync(userId + "_privateKey").then((privateKey) => {
             console.log("Private key retrieved successfully");
             return privateKey;
         }).catch((error) => {

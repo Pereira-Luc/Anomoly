@@ -28,6 +28,17 @@ export const CopyPrivateKeyPopUp = ({privateKey, setPrivateKey}: any) => {
         navigation.navigate('MainPage');
     }
 
+    //Format the key format: FFFF FFFF FFFF FFFF
+    const formatKey = (key: string) => {
+        let formattedKey = "";
+        for (let i = 0; i < key.length; i++) {
+            if (i % 4 === 0) {
+                formattedKey += " ";
+            }
+            formattedKey += key[i];
+        }
+        return formattedKey;
+    }
 
     return (
         <Animated.View style={[{opacity: fadeAnim}, styles.privateKeyBox]}>
@@ -36,8 +47,13 @@ export const CopyPrivateKeyPopUp = ({privateKey, setPrivateKey}: any) => {
                     !!!</Text>
             </View>
             <View style={styles.privateKeyBoxBody}>
-                <TouchableOpacity onPress={() => copyToClipboard()}><TextInput multiline={true} editable={false}
-                                                                               style={styles.privateKeyText}>{privateKey}</TextInput></TouchableOpacity>
+                <TouchableOpacity onPress={() => copyToClipboard()}>
+                    <View pointerEvents='none'>
+                        <TextInput multiline={true} editable={false} autoCorrect={false} style={styles.privateKeyText}>
+                            {formatKey(privateKey)}
+                        </TextInput>
+                    </View>
+                </TouchableOpacity>
                 {isCopied && <Text style={styles.privateKeyCopyInfo}>Copied to clipboard!</Text>}
                 <Text style={styles.text}>
                     You will need it on first login on new devices!

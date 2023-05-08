@@ -4,11 +4,12 @@ import styles from "../styles/mainstyle";
 import {pressIn, pressOut} from "../animations/pressAnimation";
 import {fadeInAnimation} from "../animations/fadeAnimation";
 import {ApolloError, useMutation} from "@apollo/client";
-import {SIGNUP_QUERY} from "../constants/graphql/querys/signUpQuery";
+import {SIGNUP_QUERY} from "../constants/graphql/mutations/signUpQuery";
 import * as SecureStore from "expo-secure-store";
 
 import {generateKeyPair} from "../Functions/crypto";
 import {encode as encodeBase64} from "@stablelib/base64";
+import {storePrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
 
 const SignUpForm = ({setLogin, setPrivateKey}: any) => {
     const [userKeyPair, setUserKeyPair] = useState(generateKeyPair());
@@ -22,12 +23,19 @@ const SignUpForm = ({setLogin, setPrivateKey}: any) => {
             // @ts-ignore
             global.LOGGED_IN_USER = data.signUp.user
 
+            //Add private key to global variable
+            // @ts-ignore
+            global.LOGGED_IN_USER.privateKey = encodeBase64(userKeyPair.secretKey);
+
+            //Add private key to global variable
+            data.signUp.user.privateKey = encodeBase64(userKeyPair.secretKey);
+
             data = JSON.stringify(data.signUp);
 
             //Store private key in secure store
-            /*storePrivateKeyPerUser(userId, encodeBase64(userKeyPair.secretKey)).then(r => {
+            storePrivateKeyPerUser(userId, encodeBase64(userKeyPair.secretKey)).then(r => {
                 console.log(r);
-            })*/
+            })
 
             SecureStore.setItemAsync('authPayload', data).then(r => {
                 //Show private key to user and ask them to save it
