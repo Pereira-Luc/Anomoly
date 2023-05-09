@@ -6,7 +6,9 @@ export const colors = {
     secondaryBackground: 'rgb(40, 42, 54)',
     secondaryBackgroundTransparent: 'rgba(40,42,54,0.99)',
     primaryForeground: 'rgb(68, 71, 90)',
-    primaryDetail: '#00ff9d',
+    //primaryDetail: '#00ff9d',
+    primaryDetail: '#5500ff',
+    primaryDetailLight: '#7955c5',
     lightMajor: 'rgb(147,153,194)',
     primaryDetailInformation: 'rgb(255,204,0)',
 }

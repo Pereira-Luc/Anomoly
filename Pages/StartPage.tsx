@@ -6,6 +6,7 @@ import styles from "../styles/mainstyle";
 import SignUpForm from "../components/SignUpForm";
 import {CopyPrivateKeyPopUp} from "../components/CopyPrivatKeyPopUp";
 import {MissingPrivateKeyPopUp} from "../components/MissingPrivateKeyPopUp";
+import {colors} from "../styles/colors/colors";
 
 const StartPage = () => {
     const [isLogin, setLogin] = React.useState(true);
@@ -14,16 +15,14 @@ const StartPage = () => {
     const [privateKey, setPrivateKey] = React.useState('');
 
 
-    //setSignUp(decodedPublicKey);
-
     return (
-        <LinearGradient style={styles.container} colors={['#000000', '#001115', '#001213', '#001c14']}>
-            <Image source={require('../assets/img/Anomoly.png')} style={styles.imgLogo}></Image>
+        <LinearGradient style={styles.container} colors={[colors.primaryBackgroundVeryDark, colors.primaryBackgroundDark, colors.primaryBackground, colors.primaryForeground]}>
+            <Image source={require('../assets/img/Anomoly2.png')} style={styles.imgLogo}></Image>
             <Text style={styles.heading1}>Anomoly</Text>
             {/* @ts-ignore */}
             <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "position" : null} keyboardVerticalOffset={10}>
                 {isLogin && !privateKey ? <LoginForm setLogin={setLogin} setPrivateKey={setPrivateKey}/> : null}
-                {!isLogin && !privateKey ? <SignUpForm setLogin={setLogin} setPrivateKey={setPrivateKey}/> : null}
+                {!isLogin && !privateKey ? <SignUpForm setLogin={setLogin} setPrivateKey={setPrivateKey} /> : null}
                 {/*Box to show Private key and save it if set*/}
                 {privateKey && !isLogin ?
                     <CopyPrivateKeyPopUp privateKey={privateKey} setPrivateKey={setPrivateKey}/> : null}

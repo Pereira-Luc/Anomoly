@@ -10,12 +10,16 @@ export default StyleSheet.create({
         color: '#ffffff',
         marginBottom: 10,
         padding: 10,
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: colors.primaryBackgroundDark,
         fontSize: (Platform.OS === 'ios') ? 20 : 16,
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        shadowColor: colors.primaryDetail,
+        shadowOffset: { height: 5, width: 0 },
     },
     imgLogo: {
-        width: (Platform.OS === 'ios') ? 350 : 300,
-        height: (Platform.OS === 'ios') ? 350 : 300,
+        width: (Platform.OS === 'ios') ? 250 : 250,
+        height: (Platform.OS === 'ios') ? 250 : 250,
         position: 'absolute',
         top: (Platform.OS === 'ios') ? 20 : 0,
     },
@@ -27,12 +31,11 @@ export default StyleSheet.create({
         width: (Platform.OS === 'ios') ? 300 : 250,
         height: (Platform.OS === 'ios') ? 47 : 42,
         borderRadius: 5,
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
         padding: 10,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-
+        backgroundColor: colors.primaryDetail,
     },
     container: {
         flex: 1,
@@ -175,7 +178,7 @@ export default StyleSheet.create({
         width: '100%',
     },
     changeText: {
-        color: 'rgba(0,255,157,0.62)',
+        color: colors.primaryDetailLight,
         fontSize: (Platform.OS === 'ios') ? 16 : 13,
         fontWeight: 'bold',
         top: -20,
@@ -186,7 +189,6 @@ export default StyleSheet.create({
         borderRadius: (Platform.OS === 'ios') ? 10 : 10,
         padding: '3%',
         color: '#ffffff',
-        marginTop: '5%',
         width: '90%',
     },
     settingsContainer: {
@@ -198,7 +200,7 @@ export default StyleSheet.create({
     textH3Style: {
         fontSize: (Platform.OS === 'ios') ? 15 : 12,
         fontWeight: 'bold',
-        color: 'rgba(108,255,202,0.75)',
+        color: colors.primaryDetailLight,
         marginTop: 5,
     },
     marginTop5: {
@@ -302,6 +304,31 @@ export default StyleSheet.create({
         padding: '3%',
         marginTop: '5%',
         width: '100%',
+    },
+    signUpSettingImage:{
+        width:25,
+        height:25,
+        tintColor: "#ffffff",
+    },
+    signUpSettingImageBox:{
+        position: 'absolute',
+        bottom:-75,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        width: '100%',
+    },
+    signUpSettingImageText:{
+        color:"grey",
+        marginLeft:10,
+    },settingSpacer:{
+        height:1,
+        backgroundColor: colors.primaryDetail,
+        width:"85%",
+        marginTop:20,
+        marginBottom:20,
+        borderRadius:10,
     }
 
 })
