@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ActivityIndicator, Animated, Keyboard, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, Animated, Image, Keyboard, Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "../styles/mainstyle";
 import {pressIn, pressOut} from "../animations/pressAnimation";
 import {fadeInAnimation} from "../animations/fadeAnimation";
@@ -10,9 +10,11 @@ import * as SecureStore from "expo-secure-store";
 import {generateKeyPair} from "../Functions/crypto";
 import {encode as encodeBase64} from "@stablelib/base64";
 import {storePrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
+import {ServerChangeWindow} from "./ServerChangeWindow";
 
 const SignUpForm = ({setLogin, setPrivateKey}: any) => {
     const [userKeyPair, setUserKeyPair] = useState(generateKeyPair());
+    const [serverChange, setServerChange] = useState(false);
     const publicKey = encodeBase64(userKeyPair.publicKey);
 
     let [submitLogin, {loading, error, data}] = useMutation(SIGNUP_QUERY, {
@@ -121,6 +123,12 @@ const SignUpForm = ({setLogin, setPrivateKey}: any) => {
             <TouchableOpacity onPressIn={() => pressIn()} onPressOut={() => pressOut()} onPress={() => combinedFunction(setLogin,setVisible)}>
                 <Text style={styles.smallText}>Already have an account? Login</Text>
             </TouchableOpacity>
+                <TouchableOpacity style={styles.signUpSettingImageBox} onPress={() => setServerChange(!serverChange)}>
+                    <Image source={require("../assets/icons/setting3.png")} style={styles.signUpSettingImage} ></Image>
+                    <Text style={styles.signUpSettingImageText}>Change Server</Text>
+                </TouchableOpacity>
+
+                {serverChange ? <ServerChangeWindow/> : null}
             </Animated.View>
         </View>
     );
