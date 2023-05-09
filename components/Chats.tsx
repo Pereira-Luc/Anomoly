@@ -1,6 +1,6 @@
 import {
     Image,
-    NativeSyntheticEvent,
+    NativeSyntheticEvent, RefreshControl,
     Text,
     TextInput,
     TextInputTextInputEventData,
@@ -10,9 +10,9 @@ import {
 import styles from "../styles/mainstyle";
 import {MsgBox} from "./MsgBox";
 import ChatsSearchPopPage from "./ChatsSearchPopPage";
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {CHAT_FEED_QUERY} from "../constants/graphql/querys/chatFeedQuery";
-import {useMutation, useQuery, useSubscription} from "@apollo/client";
+import {useLazyQuery, useMutation, useQuery, useSubscription} from "@apollo/client";
 import {FlatList} from "react-native-gesture-handler";
 import {decode as decodeBase64} from "@stablelib/base64";
 import {decrypt} from "../Functions/crypto";
@@ -25,11 +25,14 @@ import {logout} from "../Functions/logout";
 import {UNFRIEND} from "../constants/graphql/mutations/unFriend";
 import {searchInChatFeed} from "../Functions/searchInChatFeed";
 
-const Chats = () => {
+const Chats = ({show}) => {
 
     const [visible, setVisible] = useState(false);
+    const [loggedInUser, setLoggedInUser] = useState("");
     const [fullChatFeed, setFullChatFeed] = useState<ChatFeed[]>([]);
     const [chatFeed, setChatFeed] = useState<ChatFeed[]>([]);
+    const [refreshing, setRefreshing] = useState(false);
+    const isFocused = useIsFocused();
 
     let navigation = useNavigation();
 
@@ -39,6 +42,8 @@ const Chats = () => {
             console.log("Unfriend Mutation: ", data);
         }
     });
+
+
 
 
     const onDelete = (chatId: number, friendId: number) => {
@@ -74,7 +79,7 @@ const Chats = () => {
     }
 
     //Get Chat Feed from API CHAT_FEED_QUERY
-    let {loading, error} = useQuery(CHAT_FEED_QUERY, {
+    let [loadChatFeed, {error}] = useLazyQuery(CHAT_FEED_QUERY, {
         // Check if the data changed every 500ms
         onCompleted: (data) => {
             console.log("Query Data: ", data.loadAllChatFeed)
@@ -87,6 +92,25 @@ const Chats = () => {
     if (error) {
         //if error is AuthError, logout
         if (error.message === "You are not authenticated") {
+            console.log("AuthError")
+            logout(navigation);
+        }
+    }
+
+    //Get Chat Feed from API CHAT_FEED_QUERY
+    let { error: appError} = useQuery(CHAT_FEED_QUERY, {
+        // Check if the data changed every 500ms
+        onCompleted: (data) => {
+            console.log("Query Data: ", data.loadAllChatFeed)
+            setChatFeed(data.loadAllChatFeed);
+            setFullChatFeed(data.loadAllChatFeed);
+        },
+    });
+
+
+    if (appError) {
+        //if error is AuthError, logout
+        if (appError.message === "You are not authenticated") {
             console.log("AuthError")
             logout(navigation);
         }
@@ -129,6 +153,14 @@ const Chats = () => {
             setFullChatFeed(getSortedChatFeed(chatFeedCopy));
         }
     });
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+
+        //Get Chat Feed from API CHAT_FEED_QUERY
+        loadChatFeed().then(() => {
+            setRefreshing(false);
+        });
+    }, []);
 
 
     if (subError) console.log("Subscription Error: ", subError)
@@ -137,10 +169,20 @@ const Chats = () => {
         //Toggling the visibility state of the bottom sheet
         setVisible(!visible);
     };
-    useIsFocused();
+
+    useEffect(() => {
+        // @ts-ignore
+        setLoggedInUser(global.LOGGED_IN_USER.username)
+        // @ts-ignore
+        if (isFocused && loggedInUser !== global.LOGGED_IN_USER.username) {
+            setChatFeed([])
+            onRefresh();
+        }
+
+    }, [isFocused]);
 
     return (
-        <View style={[styles.mainContainer]}>
+        <View style={[styles.mainContainer , {display: show ? 'flex' : 'none'}]} >
             <View style={styles.head}>
                 <View style={styles.spacer}></View>
                 <View style={styles.header}>
@@ -163,6 +205,7 @@ const Chats = () => {
                 </View>
             </View>
             <FlatList
+                refreshControl={  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 initialNumToRender={10}
                 maxToRenderPerBatch={10}
                 data={chatFeed}

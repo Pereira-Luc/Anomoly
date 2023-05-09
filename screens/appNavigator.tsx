@@ -15,7 +15,6 @@ const {Navigator, Screen} = createStackNavigator();
 
 const AppNavigator = () => {
 
-
     let [initialRouteName, setInitialRouteName] = useState("");
 
     //Check if user is logged in
@@ -49,7 +48,7 @@ const AppNavigator = () => {
         return (
             <NavigationContainer>
                 <Navigator screenOptions={{
-                    headerShown: false
+                    headerShown: false,
                 }} initialRouteName={initialRouteName}>
                     <Screen name="StartPage" component={StartPage}/>
                     <Screen name="MainPage" component={MainPage}/>

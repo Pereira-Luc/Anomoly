@@ -64,7 +64,7 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
                 }}
                 enablePanDownToClose={true}
                 backgroundStyle={{backgroundColor: colors.primaryBackgroundVeryDark,}}
-                handleIndicatorStyle={{backgroundColor: '#00ff9d'}}
+                handleIndicatorStyle={{backgroundColor: colors.primaryDetail}}
                 style={chatSearchPop.bottomSheetStyle}>
                 {/*Bottom Sheet inner View*/}
                 <View style={chatSearchPop.bottomNavigationView}>
@@ -130,7 +130,7 @@ const chatSearchPop = StyleSheet.create({
         minWidth: '85%',
     }, spacerLine: {
         height: 1,
-        backgroundColor: '#00ff9d',
+        backgroundColor: colors.primaryDetail,
         marginBottom: 10,
     },
     blurryBack: {

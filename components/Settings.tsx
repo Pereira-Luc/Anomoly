@@ -7,7 +7,7 @@ import {showPicMenu} from "../Functions/cameraMenu";
 import {useEffect, useState} from "react";
 import * as FileSystem from 'expo-file-system';
 import * as SecureStore from 'expo-secure-store';
-import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useIsFocused, useNavigation} from "@react-navigation/native";
 import {useMutation} from "@apollo/client";
 import {SAVE_PROFILE_PIC} from "../constants/graphql/mutations/saveProfilePic";
 import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
@@ -17,34 +17,55 @@ import {getPrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
 
 const Settings = () => {
 
+
     const {showActionSheetWithOptions} = useActionSheet();
     const [selectedImage, setSelectedImage] = useState(require('../assets/icons/profile.png'));
     let [secretKeyPage, secretKeyViability] = useState(false);
     const [secretKey, setSecretKey] = useState('');
+    //@ts-ignore
+    const [username, setUsername] = useState(global.LOGGED_IN_USER.username);
+    //@ts-ignore
+    const [userId, setUserId] = useState(global.LOGGED_IN_USER._id);
 
-    //@ts-ignore
-    const username = global.LOGGED_IN_USER.username
-    //@ts-ignore
-    const userId = global.LOGGED_IN_USER._id
+
     const navigation = useNavigation();
 
     const [saveProfilePic, {loading: mutationLoading, error: mutationError}] = useMutation(SAVE_PROFILE_PIC)
 
+    const isFocused = useIsFocused();
+
+    useFocusEffect( () => {
+        console.log("Settings Page Loaded over useFocusEffect");
+        //@ts-ignore
+        setUsername(global.LOGGED_IN_USER.username);
+        //@ts-ignore
+        setUserId(global.LOGGED_IN_USER._id);
+
+    })
+
+
     useEffect(() => {
-        (async () => {
-            //This function will also check if the user has a profile picture stored online once we have a database
-            let defaultImage = require('../assets/icons/profile.png');
-            let profilePic = await getProfilePicPerUser(userId);
 
-            if (profilePic === null) {
-                setSelectedImage(defaultImage);
-                return;
+        if (isFocused) {
+            console.log("Settings Page Loaded over useEffect");
+        }
+        //@ts-ignore
+        getProfilePicPerUser(userId).then((profilePic: string | null) => {
+            console.log("Profile Pic: " + profilePic);
+            if (profilePic !== null) {
+                setSelectedImage({uri: profilePic});
+            }else{
+                setSelectedImage(require('../assets/icons/profile.png'))
             }
+        });
+        //@ts-ignore
+        getPrivateKeyPerUser(userId).then((key: string | null) => {
+            if (key) {
+                setSecretKey(key)
+            }
+        })
 
-
-            setSelectedImage({uri: profilePic});
-        })();
-    }, []);
+    }, [isFocused]);
 
 
     const changeProfilePic = async () => {
@@ -119,16 +140,6 @@ const Settings = () => {
     }
 
 
-    //get secret key from user
-    useEffect(() => {
-
-        getPrivateKeyPerUser(userId).then((key: string | null) => {
-            if (key) {
-                setSecretKey(key)
-            }
-        })
-
-    }, [])
 
     return (
         <View style={styles.mainContainer}>
@@ -145,9 +156,12 @@ const Settings = () => {
                 </TouchableOpacity>
                 <Text style={[styles.textH2Style, styles.marginTop5]}>{username}</Text>
             </View>
+
             {!secretKeyPage && <View style={styles.settingsContainer}>
+                <View style={styles.settingSpacer}></View>
                 <SettingsBox onPressFunction={setSecretKeyPageViability} settingName="Secret Key"
                              settingInfo="Open window for the Secret Key"/>
+                <View style={styles.settingSpacer}></View>
                 <SettingsBox onPressFunction={logout} settingName="Logout" settingInfo="Logging out"/>
             </View>}
 
