@@ -70,7 +70,7 @@ const MainPage = () => {
         <Host>
             <ActionSheetProvider>
                 <View style={styles.mainContainer}>
-                    {page === "Chats" ? <Chats/> : null}
+                    <Chats show={page == "Chats" }/>
                     {page === "Groups" ? <Groups/> : null}
                     {page === "Settings" ? <Settings/> : null}
                     <View style={styles.footer}>
