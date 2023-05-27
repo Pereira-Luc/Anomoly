@@ -16,11 +16,11 @@ export const getServer = async (): Promise<string> => {
     return Promise.resolve(
         SecureStore.getItemAsync("serverAddress").then((server) => {
             console.log("Server retrieved successfully");
-            if (server === null) { return "http://192.168.178.125:4000/graphql" }
+            if (server === null) { return "https://graphql.anomoly.cloud" }
             return server;
         }).catch((error) => {
             // Return default server if no server is stored
-            return "http://192.168.178.125:4000/graphql"
+            return "https://graphql.anomoly.cloud"
         })
     )
 }

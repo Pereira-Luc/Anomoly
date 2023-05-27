@@ -6,6 +6,7 @@ import {useState} from "react";
 import {base64ToImage} from "../Functions/functions";
 import {useQuery} from "@apollo/client";
 import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
+import {encode as encodeBase64} from "@stablelib/base64";
 //https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/swipeable/
 
 // Maybe interesting for later: https://docs.swmansion.com/react-native-gesture-handler/docs/api/components/drawer-layout
@@ -13,7 +14,7 @@ import {GET_USER_PROFILE_IMG} from "../constants/graphql/querys/getProfileImg";
 export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo, onDelete}: String | any) {
     let navigation = useNavigation();
 
-    const [profilePic, setProfilePic] = useState<string>('');
+    const [profilePic, setProfilePic] = useState<string>(encodeBase64(require('../assets/icons/profile.png')));
 
 
     const renderRightView = (): JSX.Element => {
@@ -45,11 +46,13 @@ export function MsgBox({lastMsg, nameOfUser, date, chatId, userInfo, onDelete}: 
             let profilePicB64: string = data.getUserProfilePic;
             //check if has a profile pic
             if (profilePicB64) {
+                console.log("User has Profile Pic");
                 const imageURI = await base64ToImage(profilePicB64, 500);
                 setProfilePic(imageURI);
             }
         }
     });
+
 
     return (
         <Swipeable

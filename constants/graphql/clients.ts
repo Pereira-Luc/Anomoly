@@ -12,7 +12,10 @@ export const getApolloClient = async () => {
 
     const serverAddress = await getServer();
     console.log("Server address: " + serverAddress);
+
     const wsServerAddress = serverAddress.replace("http", "ws");
+
+    console.log("WS Server address: " + wsServerAddress);
 
     const httpLink = createHttpLink({
         uri: serverAddress,
