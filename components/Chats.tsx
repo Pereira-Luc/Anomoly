@@ -135,7 +135,12 @@ const Chats = ({show}) => {
             if (chatRoomIndex === -1) {
                 console.log("ChatRoom not found add it to the chatFeed")
                 // ChatRoom not found add it to the chatFeed
-                chatFeedCopy.push(subscriptionData.data.data.chatFeedContent);
+                let chatFeedElement = subscriptionData.data.data.chatFeedContent;
+
+                // @ts-ignore
+                console.log("ChatFeedElement: ", chatFeedElement, "Logged in User: ", global.LOGGED_IN_USER.username)
+
+                chatFeedCopy.push(chatFeedElement);
                 setChatFeed(getSortedChatFeed(chatFeedCopy));
                 setFullChatFeed(getSortedChatFeed(chatFeedCopy));
                 return;

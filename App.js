@@ -4,6 +4,7 @@ import {ApolloProvider} from '@apollo/client';
 import {getApolloClient} from './constants/graphql/clients';
 import * as Notifications from "expo-notifications";
 import {useEffect, useState} from "react";
+import { StatusBar } from 'expo-status-bar';
 
 
 //Notification handler
@@ -40,6 +41,7 @@ export default function App() {
     console.log("fonts loaded");
     return (
         <ApolloProvider client={client}>
+            <StatusBar style="auto"/>
           <AppNavigator/>
         </ApolloProvider>
     );
