@@ -1,22 +1,22 @@
 // import React in our code
-import React, {useMemo, useRef} from 'react';
+import React, { useMemo, useRef } from 'react';
 
 // import all the components we are going to use
-import {Keyboard, Platform, StyleSheet, Text, TextInput, View} from 'react-native';
+import { Keyboard, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import {FlatList} from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 
 //import basic react native components
 import BottomSheet from '@gorhom/bottom-sheet';
-import {Portal} from "react-native-portalize";
+import { Portal } from "react-native-portalize";
 import styles from "../styles/mainstyle";
-import {colors} from "../styles/colors/colors";
-import {useQuery} from "@apollo/client";
-import {SEARCH_QUERY} from "../constants/graphql/querys/searchUser";
+import { colors } from "../styles/colors/colors";
+import { useQuery } from "@apollo/client";
+import { SEARCH_QUERY } from "../constants/graphql/querys/searchUser";
 import ProfileSearchBox from "./ProfileSearchBox";
-import {GET_ALL_FRIEND_REQUESTS} from "../constants/graphql/querys/getFriendRequests";
+import { GET_ALL_FRIEND_REQUESTS } from "../constants/graphql/querys/getFriendRequests";
 
-const ChatSearchPopPage = ({visible, setVisible}: any) => {
+const ChatSearchPopPage = ({ visible, setVisible }: any) => {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['90%', '90%'], []);
 
@@ -24,11 +24,11 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
     let [dataToShow, setDataToShow] = React.useState<any>([]);
 
     //Get Search Results from API SEARCH_QUERY
-    let {error, data} = useQuery(SEARCH_QUERY, {
+    let { error, data } = useQuery(SEARCH_QUERY, {
         variables:
-            {
-                v: searchText
-            },
+        {
+            v: searchText
+        },
         fetchPolicy: 'no-cache',
         onCompleted: (data) => {
             setDataToShow(data.searchUser)
@@ -36,7 +36,7 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
     });
 
     //load all the active friend requests
-    let {error: friendRequestError, data: friendRequestData} = useQuery(GET_ALL_FRIEND_REQUESTS, {
+    let { error: friendRequestError, data: friendRequestData } = useQuery(GET_ALL_FRIEND_REQUESTS, {
         fetchPolicy: 'network-only',
         onCompleted: (data) => {
             console.log("Friend Requests: ", data.getFriendRequests)
@@ -63,8 +63,8 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
                     if (index === -1) Keyboard.dismiss()
                 }}
                 enablePanDownToClose={true}
-                backgroundStyle={{backgroundColor: colors.primaryBackgroundVeryDark,}}
-                handleIndicatorStyle={{backgroundColor: colors.primaryDetail}}
+                backgroundStyle={{ backgroundColor: colors.primaryBackgroundVeryDark, }}
+                handleIndicatorStyle={{ backgroundColor: colors.primaryDetail }}
                 style={chatSearchPop.bottomSheetStyle}>
                 {/*Bottom Sheet inner View*/}
                 <View style={chatSearchPop.bottomNavigationView}>
@@ -77,18 +77,18 @@ const ChatSearchPopPage = ({visible, setVisible}: any) => {
 
                         <View style={[styles.searchBox, chatSearchPop.searchBox]}>
                             <TextInput onChangeText={(v) => setSearchText(v)} placeholderTextColor={"#a8a8a8"}
-                                       placeholder="Search"
-                                       style={styles.searchInput}></TextInput>
+                                placeholder="Search"
+                                style={styles.searchInput}></TextInput>
                         </View>
                         <View style={chatSearchPop.spacerLine}></View>
                         <FlatList
                             data={dataToShow}
-                            renderItem={({item, index}) => {
+                            renderItem={({ item }) => {
                                 console.log("Item: ", item)
-                                return (<ProfileSearchBox key={item} userId={item._id} username={item.username}
-                                                          friendRequestStatus={item.friendRequestStatus}/>)
+                                return (<ProfileSearchBox key={item._id} userId={item._id} username={item.username}
+                                    friendRequestStatus={item.friendRequestStatus} />)
                             }}
-                            keyExtractor={item => item.userId}/>
+                            keyExtractor={item => item.userId} />
                     </View>
                 </View>
             </BottomSheet>

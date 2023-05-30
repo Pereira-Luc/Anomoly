@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from "react";
-import {ActivityIndicator, Animated, Image, Keyboard, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Animated, Image, Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "../styles/mainstyle";
-import {pressIn, pressOut} from "../animations/pressAnimation";
-import {fadeInAnimation} from "../animations/fadeAnimation";
-import {ApolloError, useMutation} from "@apollo/client";
-import {SIGNUP_QUERY} from "../constants/graphql/mutations/signUpQuery";
+import { pressIn, pressOut } from "../animations/pressAnimation";
+import { fadeInAnimation } from "../animations/fadeAnimation";
+import { ApolloError, useMutation } from "@apollo/client";
+import { SIGNUP_QUERY } from "../constants/graphql/mutations/signUpQuery";
 import * as SecureStore from "expo-secure-store";
 
-import {generateKeyPair} from "../Functions/crypto";
-import {encode as encodeBase64} from "@stablelib/base64";
-import {storePrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
-import {ServerChangeWindow} from "./ServerChangeWindow";
+import { generateKeyPair } from "../Functions/crypto";
+import { encode as encodeBase64 } from "@stablelib/base64";
+import { storePrivateKeyPerUser } from "../Functions/storePrivateKeyPerUser";
+import { ServerChangeWindow } from "./ServerChangeWindow";
 
-const SignUpForm = ({setLogin, setPrivateKey}: any) => {
+const SignUpForm = ({ setLogin, setPrivateKey }: any) => {
     const [userKeyPair, setUserKeyPair] = useState(generateKeyPair());
     const [serverChange, setServerChange] = useState(false);
     const publicKey = encodeBase64(userKeyPair.publicKey);
 
-    let [submitLogin, {loading, error, data}] = useMutation(SIGNUP_QUERY, {
+    let [submitLogin, { loading, error, data }] = useMutation(SIGNUP_QUERY, {
         onCompleted: (data) => {
             let userId = data.signUp.user._id;
 
@@ -96,8 +96,9 @@ const SignUpForm = ({setLogin, setPrivateKey}: any) => {
 
     return (
         <View style={styles.inputBody}>
-            <Animated.View style={{opacity: fadeAnim}}>
-                {loading && <ActivityIndicator size="large" color="#ffffff"/>}
+            <Animated.View style={{ opacity: fadeAnim }}>
+
+                {loading && <ActivityIndicator size="large" color="#ffffff" />}
                 {error ? (<View style={styles.errorBox}>
                     {splitErrors(error).map((errorMsg, index) => {
                         return <Text key={index} style={styles.errorText}>{errorMsg}</Text>
@@ -106,29 +107,33 @@ const SignUpForm = ({setLogin, setPrivateKey}: any) => {
                 </View>) : null}
 
                 <TextInput placeholder="Username" style={styles.input}
-                           onChangeText={(username) => setUsername(username)}
-                           value={username} placeholderTextColor={'#ffffff'}
+                    onChangeText={(username) => setUsername(username)}
+                    value={username} placeholderTextColor={'#ffffff'}
                 ></TextInput>
                 <TextInput placeholder="Password" style={styles.input}
-                           onChangeText={(password) => setPassword(password)}
-                           value={password} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
+                    onChangeText={(password) => setPassword(password)} secureTextEntry={true}
+                    value={password} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
                 ></TextInput>
-                <TextInput placeholder="Password Confirm" style={styles.input}
-                       onChangeText={(passwordConfirm) => setPasswordConfirm(passwordConfirm)}
-                       value={passwordConfirm} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
-            ></TextInput>
-            <TouchableOpacity onPressIn={() => pressIn()} onPressOut={() => pressOut()}  onPress={submitSignUp} style={styles.buttonsContainer}>
-                <Text style={styles.text}>Sign Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPressIn={() => pressIn()} onPressOut={() => pressOut()} onPress={() => combinedFunction(setLogin,setVisible)}>
-                <Text style={styles.smallText}>Already have an account? Login</Text>
-            </TouchableOpacity>
+                <TextInput placeholder="Password Confirm" style={styles.input} secureTextEntry={true}
+                    onChangeText={(passwordConfirm) => setPasswordConfirm(passwordConfirm)}
+                    value={passwordConfirm} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
+                ></TextInput>
+                <TouchableOpacity onPressIn={() => pressIn()} onPressOut={() => pressOut()} onPress={submitSignUp} style={styles.buttonsContainer}>
+                    <Text style={styles.text}>Sign Up</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPressIn={() => pressIn()} onPressOut={() => pressOut()} onPress={() => combinedFunction(setLogin, setVisible)}>
+                    <Text style={styles.smallText}>Already have an account? Login</Text>
+                </TouchableOpacity>
+
+
+                {/* Change Server Button */}
                 <TouchableOpacity style={styles.signUpSettingImageBox} onPress={() => setServerChange(!serverChange)}>
                     <Image source={require("../assets/icons/setting3.png")} style={styles.signUpSettingImage} ></Image>
                     <Text style={styles.signUpSettingImageText}>Change Server</Text>
                 </TouchableOpacity>
 
-                {serverChange ? <ServerChangeWindow/> : null}
+
+                {serverChange ? (<ServerChangeWindow closePopUp={setServerChange} showPopUp={serverChange} />) : (null)}
             </Animated.View>
         </View>
     );
