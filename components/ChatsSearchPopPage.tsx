@@ -39,7 +39,6 @@ const ChatSearchPopPage = ({ visible, setVisible }: any) => {
     let { error: friendRequestError, data: friendRequestData } = useQuery(GET_ALL_FRIEND_REQUESTS, {
         fetchPolicy: 'network-only',
         onCompleted: (data) => {
-            console.log("Friend Requests: ", data.getFriendRequests)
             setDataToShow(data.getFriendRequests)
         }
     });
@@ -47,6 +46,11 @@ const ChatSearchPopPage = ({ visible, setVisible }: any) => {
 
     if (friendRequestError) console.log(friendRequestError.message);
     if (error) console.log(error.message);
+
+    //Function to remove a friend request from the list
+    const removeFriendRequest = (userId: string) => {
+        setDataToShow(dataToShow.filter((item: any) => item._id !== userId))
+    }
 
 
     return (
@@ -86,7 +90,7 @@ const ChatSearchPopPage = ({ visible, setVisible }: any) => {
                             renderItem={({ item }) => {
                                 console.log("Item: ", item)
                                 return (<ProfileSearchBox key={item._id} userId={item._id} username={item.username}
-                                    friendRequestStatus={item.friendRequestStatus} />)
+                                    friendRequestStatus={item.friendRequestStatus} removeFirendRequestParent={removeFriendRequest}/>)
                             }}
                             keyExtractor={item => item.userId} />
                     </View>

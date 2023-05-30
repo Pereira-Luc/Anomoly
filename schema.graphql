@@ -40,6 +40,7 @@ type Mutation {
     acceptRequest(friendId: ID!): String!
     changeProfilePicture(image: String!): Boolean!
     createFriends(friendId: ID!): String!
+    refuseRequest(friendId: ID!): String!
     savePushNotificationToken(token: String!): String!
     sendMsg(chatId: ID!, message: String!, receiverId: ID!): ChatMessage!
     signUp(confirmPassword: String!, password: String!, publicKey: Base64, username: String!): AuthPayload!
@@ -52,12 +53,12 @@ type Query {
     getFriendRequests: [User]!
     getUserInformation(userId: ID!): User!
     getUserProfilePic(userId: ID!): String!
+    isAuth: Boolean!
     loadAllChatFeed: [ChatFeed]!
     loadChatContent(chatId: ID!): [ChatMessage]!
     loadFriends(status: String!): [User]!
     login(password: String!, username: String!): AuthPayload!
     searchUser(v: String!): [User]!
-    testLogin: String!
 }
 
 type Subscription {
@@ -69,9 +70,7 @@ type User {
     _id: ID
     chatId: ID
     friendRequestStatus: FriendRequestStatus
-    password: String
     profilePic: String
-    profilePicture: String
     publicKey: Base64!
     username: String!
 }
