@@ -1,5 +1,8 @@
 import * as SecureStore from "expo-secure-store";
 
+const defaultServer = 'https://graphql.anomoly.cloud/graphql'
+
+
 export const storeServer = async (server: string): Promise<boolean> => {
     return Promise.resolve(
         SecureStore.setItemAsync("serverAddress", server).then(() => {
@@ -16,11 +19,12 @@ export const getServer = async (): Promise<string> => {
     return Promise.resolve(
         SecureStore.getItemAsync("serverAddress").then((server) => {
             console.log("Server retrieved successfully");
-            if (server === null) { return "https://graphql.anomoly.cloud" }
+            //@ts-ignore
+            if (server === null) { return defaultServer }
             return server;
         }).catch((error) => {
-            // Return default server if no server is stored
-            return "https://graphql.anomoly.cloud"
+            //@ts-ignore Return default server if no server is stored 
+            return defaultServer;
         })
     )
 }
