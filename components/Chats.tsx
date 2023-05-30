@@ -193,7 +193,7 @@ const Chats = ({show}) => {
                 <View style={styles.header}>
                     <View style={styles.bubbleButtonRight}>
                         <TouchableOpacity>
-                            <Text style={styles.bubbleButtonRightImg}>Edit</Text>
+                            <Text style={styles.bubbleButtonRightImg}></Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.textH1Style}>Chats</Text>
@@ -206,7 +206,7 @@ const Chats = ({show}) => {
                 </View>
                 <View style={styles.searchBox}>
                     <TextInput placeholderTextColor={"#a8a8a8"} placeholder="Search"
-                               style={styles.searchInput} onTextInput={(input) => search(input)}></TextInput>
+                               style={styles.searchInput} onChange={(input) => search(input)}></TextInput>
                 </View>
             </View>
             <FlatList
