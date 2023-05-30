@@ -92,6 +92,9 @@ export function MsgRoom({route}: any) {
         variables: {chatId: chatRoomId, message: encryptedMsg, receiverId: userInfos._id},
     });
 
+    
+
+
     const sendMsgToChatRoom = () => {
 
         //Encrypt the message with the secretKey
@@ -133,6 +136,12 @@ export function MsgRoom({route}: any) {
         navigation.navigate('MainPage');
     }
 
+
+    if (errorSend) {
+        if (errorSend.message === "User is not part of the chat") {
+            goBack();
+        }
+    }
 
     return (
         <View style={stylesMsgRoom.containerMain}>
