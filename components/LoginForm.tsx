@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from "react";
-import {ActivityIndicator, Animated, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Animated, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "../styles/mainstyle";
-import {fadeInAnimation} from "../animations/fadeAnimation";
-import {useNavigation} from "@react-navigation/native";
+import { fadeInAnimation } from "../animations/fadeAnimation";
+import { useNavigation } from "@react-navigation/native";
 
-import {useLazyQuery} from '@apollo/client';
-import {LOGIN_QUERY} from "../constants/graphql/querys/loginQuery";
+import { useLazyQuery } from '@apollo/client';
+import { LOGIN_QUERY } from "../constants/graphql/querys/loginQuery";
 import * as SecureStore from "expo-secure-store";
-import {getPrivateKeyPerUser} from "../Functions/storePrivateKeyPerUser";
+import { getPrivateKeyPerUser } from "../Functions/storePrivateKeyPerUser";
+import mainstyle from "../styles/mainstyle";
 
-const LoginForm = ({setLogin, setPrivateKey}: any) => {
+const LoginForm = ({ setLogin, setPrivateKey }: any) => {
     let navigation = useNavigation();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
 
-    let [submitLogin, {loading, error, data}] = useLazyQuery(LOGIN_QUERY, {
+    let [submitLogin, { loading, error, data }] = useLazyQuery(LOGIN_QUERY, {
         fetchPolicy: "no-cache",
         onCompleted: (data) => {
             console.log("Login Successful");
@@ -26,7 +27,7 @@ const LoginForm = ({setLogin, setPrivateKey}: any) => {
 
     const submitLoginFunction = async () => {
         console.log("Submitting Login");
-        await submitLogin({variables: {username: username, password: password}})
+        await submitLogin({ variables: { username: username, password: password } })
     }
 
     const navigateToMainPage = async (data: any, setPrivateKey: any) => {
@@ -74,17 +75,22 @@ const LoginForm = ({setLogin, setPrivateKey}: any) => {
 
     return (
         <View style={styles.inputBody}>
-            <Animated.View style={{opacity: fadeAnim}}>
-                {error && <Text style={styles.text}>{error.message}</Text>}
+            <Animated.View style={{ opacity: fadeAnim }}>
+
+                {error && (
+                    <View style={styles.errorBox}>
+                        <Text style={mainstyle.errorText}>{error.message}</Text>
+                    </View>)}
+
                 <TextInput placeholder="Username" style={styles.input}
-                           onChangeText={(username) => setUsername(username)}
-                           value={username} placeholderTextColor={'#ffffff'}
+                    onChangeText={(username) => setUsername(username)}
+                    value={username} placeholderTextColor={'#ffffff'}
                 ></TextInput>
                 <TextInput placeholder="Password" style={styles.input}
-                           onChangeText={(password) => setPassword(password)}
-                           value={password} placeholderTextColor={'#ffffff'} blurOnSubmit={true}
+                    onChangeText={(password) => setPassword(password)}
+                    value={password} placeholderTextColor={'#ffffff'} blurOnSubmit={true} secureTextEntry={true}
                 ></TextInput>
-                {loading && <ActivityIndicator size="large" color="#ffffff"/>}
+                {loading && <ActivityIndicator size="large" color="#ffffff" />}
                 <TouchableOpacity onPress={() => submitLoginFunction()} style={styles.buttonsContainer}>
                     <Text style={styles.text}>Login</Text>
                 </TouchableOpacity>

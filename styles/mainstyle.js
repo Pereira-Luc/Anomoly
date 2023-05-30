@@ -18,8 +18,8 @@ export default StyleSheet.create({
         shadowOffset: { height: 5, width: 0 },
     },
     imgLogo: {
-        width: (Platform.OS === 'ios') ? 250 : 250,
-        height: (Platform.OS === 'ios') ? 250 : 250,
+        width: (Platform.OS === 'ios') ? 220 : 190,
+        height: (Platform.OS === 'ios') ? 220 : 190,
         position: 'absolute',
         top: (Platform.OS === 'ios') ? 20 : 0,
     },
@@ -38,10 +38,12 @@ export default StyleSheet.create({
         backgroundColor: colors.primaryDetail,
     },
     container: {
-        flex: 1,
+        display: 'flex',
         backgroundColor: '#080e2c',
         alignItems: 'center',
         justifyContent: 'center',
+        height: '100%',
+        width: '100%',
     },
     heading1: {
         position: 'absolute',
@@ -256,11 +258,10 @@ export default StyleSheet.create({
     }, privateKeyBox: {
         backgroundColor: colors.secondaryBackground,
         borderRadius: (Platform.OS === 'ios') ? 10 : 10,
-        padding: '3%',
+        padding: Platform.OS === 'ios' ? 10 : 6,
         color: '#ffffff',
         marginTop: '20%',
-        minWidth: '90%',
-        maxWidth: '90%',
+        width: '95%',
     }, privateKeyBoxHeader: {
         display: 'flex',
         flexDirection: 'row',

@@ -6,7 +6,6 @@ const stylesMsgBox = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        //borderColor: 'rgba(0,255,157,0.51)',
         borderBottomWidth: 0.5,
         marginLeft: '2%',
         marginRight: '2%',
@@ -14,8 +13,7 @@ const stylesMsgBox = StyleSheet.create({
         backgroundColor: colors.secondaryBackground,
         borderRadius: 10,
         marginBottom: 5,
-        //Shadow
-        shadowColor: 'rgba(0,255,157,0.51)',
+        height: Platform.OS === 'ios' ? 85 : 80,
     },
     lastMsg: {
         color: '#9a9a9a',
@@ -50,12 +48,18 @@ const stylesMsgBox = StyleSheet.create({
     deleteButtonText: {
         color: '#ffffff',
         fontSize: (Platform.OS === 'ios') ? 20 : 16,
+        textAlign: 'center',
     },
     deleteButtonContainer: {
-        margin: 0,
         alignContent: 'center',
         justifyContent: 'center',
-        width: 70,
+        backgroundColor: colors.primaryDetailWarning,
+        height: Platform.OS === 'ios' ? 65 : 60,
+        margin: 10,
+        borderRadius: 10,
+        width: Dimensions.get('window').width * 0.25,
+        padding: 5,
+        textAlign: 'center',
     },
     lastMsgDate: {
         color: '#9a9a9a',
@@ -64,7 +68,7 @@ const stylesMsgBox = StyleSheet.create({
     lastMsgText: {
         //Prevent the text from going to the next line
         flexShrink: 1,
-
+        textAlign: 'center',
     },
     pfPicImg: {
         width: '100%',

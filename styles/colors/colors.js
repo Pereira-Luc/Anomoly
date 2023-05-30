@@ -11,4 +11,6 @@ export const colors = {
     primaryDetailLight: '#7955c5',
     lightMajor: 'rgb(147,153,194)',
     primaryDetailInformation: 'rgb(255,204,0)',
+    primaryDetailError: 'rgb(255,0,0)',
+    primaryDetailWarning: '#ff9966',
 }

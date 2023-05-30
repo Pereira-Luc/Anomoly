@@ -1,3 +1,4 @@
+// https://docs.expo.dev/versions/latest/sdk/imagepicker/ - Expo ImagePicker
 import * as ImagePicker from "expo-image-picker";
 
 const checkPermissionsCamera = async (cameraGranted: boolean): Promise<boolean> => {
